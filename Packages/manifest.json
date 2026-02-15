@@ -48,6 +48,15 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.unity-atoms.unity-atoms-base-atoms": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/BaseAtoms#canary",
+    "com.unity-atoms.unity-atoms-core": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/Core#canary",
+    "com.unity-atoms.unity-atoms-fsm": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/FSM#canary",
+    "com.unity-atoms.unity-atoms-input-system": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/InputSystem#canary",
+    "com.unity-atoms.unity-atoms-mobile": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/Mobile#canary",
+    "com.unity-atoms.unity-atoms-mono-hooks": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/MonoHooks#canary",
+    "com.unity-atoms.unity-atoms-scene-mgmt": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/SceneMgmt#canary",
+    "com.unity-atoms.unity-atoms-tags": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/Tags#canary",
+    "com.unity-atoms.unity-atoms-ui": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/UI#canary"
   }
 }

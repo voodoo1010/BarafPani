@@ -9,6 +9,7 @@ namespace _Features.Player._Features.Sprint.Scripts
     {
         [SerializeField] private float sprintMultiplier = 1.5f;
         private CharacterWalk _characterWalk;
+        //TODO: put this data shit in scriptableojects
 
         protected override void Awake()
         {

@@ -32,8 +32,6 @@ namespace _Features.Player.Scripts
             Gizmos.color = IsGrounded ? Color.green : Color.red;
             Gizmos.DrawWireSphere(groundCheckPoint.position, groundCheckRadius);
         }
-
-        // Input events — published by CharacterInput, consumed by features
         public event Action<Vector2> OnMoveInput;
         public event Action<bool> OnSprintInput;
         public event Action<bool> OnCrouchInput;

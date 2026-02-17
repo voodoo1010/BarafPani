@@ -9,6 +9,7 @@ namespace _Features.Player._Features.Jump.Scripts
         [SerializeField] private float gravity = -20f;
 
         private float _verticalVelocity;
+        //TODO: put this data shit in scriptableojects
 
         private void OnEnable()
         {

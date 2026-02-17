@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1291826065210231538}
   - component: {fileID: 2754944743583265984}
   m_Layer: 0
-  m_Name: Visual
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 2641132854892872536}
   - component: {fileID: 1539806886013619017}
   - component: {fileID: 5933510809653711024}
+  - component: {fileID: 5166780736399633005}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -219,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInput
   moveAction: {fileID: -3977828962232948354, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   sprintAction: {fileID: -3780055258321925678, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
-  crouchAction: {fileID: 0}
+  crouchAction: {fileID: -52406771435755894, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   grabAction: {fileID: 0}
   jumpAction: {fileID: 6601366802577399749, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
 --- !u!114 &3450564323608523305
@@ -234,6 +235,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36955add2162bcd4aa11fe226b1d6728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Crouch.Scripts.CharacterCrouch
+  crouchHeight: 1
+  transitionDuration: 0.3
+  crouchSpeedMultiplier: 0.5
 --- !u!114 &5990594160291989676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,3 +290,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Jump.Scripts.CharacterJump
   jumpHeight: 2
   gravity: -20
+--- !u!114 &5166780736399633005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36955add2162bcd4aa11fe226b1d6728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Crouch.Scripts.CharacterCrouch
+  crouchHeight: 1
+  transitionDuration: 0.3
+  crouchSpeedMultiplier: 0.5

@@ -10,7 +10,6 @@ namespace _Features.Player._Features.Sprint.Scripts
     {
         [SerializeField] private CharacterSprintSettings characterSprintSettings;
         private CharacterWalk _characterWalk;
-        //TODO: put this data shit in scriptableojects
 
         protected override void Awake()
         {

@@ -1,3 +1,4 @@
+using _Features.Player._Features.Sprint.Config.Scripts;
 using _Features.Player._Features.Walk.Scripts;
 using _Features.Player.Scripts;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace _Features.Player._Features.Sprint.Scripts
     [RequireComponent(typeof(CharacterWalk))]
     public class CharacterSprint : CharacterFeature
     {
-        [SerializeField] private float sprintMultiplier = 1.5f;
+        [SerializeField] private CharacterSprintSettings characterSprintSettings;
         private CharacterWalk _characterWalk;
         //TODO: put this data shit in scriptableojects
 
@@ -27,7 +28,7 @@ namespace _Features.Player._Features.Sprint.Scripts
         }
         private void HandleSprint(bool pressed)
         {
-            if (_characterWalk) _characterWalk.SpeedMultiplier = pressed ? sprintMultiplier : 1f;
+            if (_characterWalk) _characterWalk.SpeedMultiplier = pressed ? characterSprintSettings.SprintMultiplier : 1f;
         }
     }
 }

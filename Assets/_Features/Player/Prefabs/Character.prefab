@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ee3584d83e9bd4bc6b558737a6d1e362, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -90,7 +90,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &4297388580038077419
+--- !u!1 &831492677748478452
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3799011006865307001}
+  - component: {fileID: 5689203863744759534}
   m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
@@ -106,13 +106,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3799011006865307001
+--- !u!4 &5689203863744759534
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4297388580038077419}
+  m_GameObject: {fileID: 831492677748478452}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
@@ -134,11 +134,10 @@ GameObject:
   - component: {fileID: 3865241300867043155}
   - component: {fileID: 6331501940541924290}
   - component: {fileID: 3450564323608523305}
+  - component: {fileID: 5933510809653711024}
   - component: {fileID: 5990594160291989676}
   - component: {fileID: 2641132854892872536}
   - component: {fileID: 1539806886013619017}
-  - component: {fileID: 5933510809653711024}
-  - component: {fileID: 5166780736399633005}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -160,7 +159,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1242696850610057061}
-  - {fileID: 3799011006865307001}
+  - {fileID: 5689203863744759534}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &5827182343140277596
@@ -201,11 +200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player.Scripts.Character
   characterControllerUnityComponent: {fileID: 5827182343140277596}
-  groundCheckPoint: {fileID: 3799011006865307001}
-  groundCheckRadius: 0.2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  characterSettings: {fileID: 11400000, guid: 2c0bac2bc295a1c49b6635e4c87b88a5, type: 2}
+  groundCheckTransform: {fileID: 5689203863744759534}
 --- !u!114 &6331501940541924290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,9 +231,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36955add2162bcd4aa11fe226b1d6728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Crouch.Scripts.CharacterCrouch
-  crouchHeight: 1
-  transitionDuration: 0.3
-  crouchSpeedMultiplier: 0.5
+  crouchSettings: {fileID: 11400000, guid: 14f8735d461f23244a01030bbe08099d, type: 2}
+--- !u!114 &5933510809653711024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e300d6a385b8924f96f3ea085bc260a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Jump.Scripts.CharacterJump
+  characterJumpSettings: {fileID: 11400000, guid: 83eabc39d7803ad419904616ab2cba9e, type: 2}
 --- !u!114 &5990594160291989676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3972348e30fbeaa49949492070b78461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Walk.Scripts.CharacterWalk
-  speed: 5
+  characterWalkSettings: {fileID: 11400000, guid: 5cf8929d24ba90040b6f0e42eef03608, type: 2}
 --- !u!114 &1539806886013619017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,33 +282,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694b877b606c3934f84fb0f81dec4dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Sprint.Scripts.CharacterSprint
-  sprintMultiplier: 1.5
---- !u!114 &5933510809653711024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8923762327679711103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e300d6a385b8924f96f3ea085bc260a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Jump.Scripts.CharacterJump
-  jumpHeight: 2
-  gravity: -20
---- !u!114 &5166780736399633005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8923762327679711103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36955add2162bcd4aa11fe226b1d6728, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Crouch.Scripts.CharacterCrouch
-  crouchHeight: 1
-  transitionDuration: 0.3
-  crouchSpeedMultiplier: 0.5
+  characterSprintSettings: {fileID: 11400000, guid: 0d795a4b3c925984e9cb833be4c40bb6, type: 2}

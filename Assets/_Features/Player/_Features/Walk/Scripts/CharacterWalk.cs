@@ -1,3 +1,4 @@
+using _Features.Player._Features.Walk.Config.Scripts;
 using _Features.Player.Scripts;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace _Features.Player._Features.Walk.Scripts
 {
     public class CharacterWalk : CharacterFeature
     {
-        [SerializeField] private float speed = 5f;
+        [SerializeField] private CharacterWalkSettings characterWalkSettings;
         //TODO: put this data shit in scriptableojects
         public float SpeedMultiplier { get; set; } = 1f;
         public float CrouchSpeedMultiplier { get; set; } = 1f;
@@ -28,7 +29,7 @@ namespace _Features.Player._Features.Walk.Scripts
         private void Update()
         {
             if (_moveInput == Vector2.zero) return;
-            Character.CharacterControllerUnityComponent.Move(new Vector3(_moveInput.x, 0f, _moveInput.y) * (speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime));
+            Character.CharacterControllerUnityComponent.Move(new Vector3(_moveInput.x, 0f, _moveInput.y) * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime));
         }
 
         private void HandleMove(Vector2 input)

@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/NGO_Minimal_Setup/NGO_Setup.unity
+    guid: af6ae39f655b93b40a20359219ba098b
+  - enabled: 1
+    path: Assets/Debug-Multiplayer/Scenes/MultiplayerLobby.unity
+    guid: ee058b773f2c69749b75f55a69c83c9c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   m_UseUCBPForAssetBundles: 0

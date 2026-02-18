@@ -1099,7 +1099,7 @@ MonoBehaviour:
     animatorParameterAttributeExamples:
       animatorController: {fileID: 9100000, guid: 3a1cea91d6692bf40b069a1d3b66f1b5, type: 2}
       animator: {fileID: 0}
-      paramName2: NewFloat
+      paramName2: <missing>
       paramName: <missing>
     arrayContainerExamples:
       visible: 1

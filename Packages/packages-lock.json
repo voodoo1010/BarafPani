@@ -1,5 +1,97 @@
 {
   "dependencies": {
+    "com.unity-atoms.unity-atoms-base-atoms": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/BaseAtoms#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity-atoms.unity-atoms-core": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-core": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/Core#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-fsm": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/FSM#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-input-system": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/InputSystem#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0",
+        "com.unity.inputsystem": "1.0.1"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-mobile": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/Mobile#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-mono-hooks": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/MonoHooks#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-scene-mgmt": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/SceneMgmt#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-tags": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/Tags#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
+    "com.unity-atoms.unity-atoms-ui": {
+      "version": "https://github.com/unity-atoms/unity-atoms.git?path=/Packages/UI#canary",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity-atoms.unity-atoms-core": "4.5.0",
+        "com.unity-atoms.unity-atoms-base-atoms": "4.5.0"
+      },
+      "hash": "39dcc2d50ae81f301d97e05b2193db4a76f50287"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.10",
       "depth": 0,

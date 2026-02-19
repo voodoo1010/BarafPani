@@ -9,6 +9,7 @@ using Unity.Services.Relay.Models;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using Unity.Netcode;
+using System;
 
 public class MultiplayerLobbyManager : MonoBehaviour
 {
@@ -16,6 +17,13 @@ public class MultiplayerLobbyManager : MonoBehaviour
     [Tooltip("To keep lobby alive")]
     [SerializeField] private float heartBeatTimerLimit = 20f;
     private float heartBeatTimer;
+    [SerializeField] private float lobbyPollTimerLimit = 1.1f;
+    private float lobbyPollTimer;
+
+    // EVENTS
+    public static Action OnLobbyCreated;
+    public static Action OnLobbyJoined;
+    public static Action<Lobby> OnLobbyStateChanged;
 
     public static MultiplayerLobbyManager Instance;
 
@@ -28,16 +36,8 @@ public class MultiplayerLobbyManager : MonoBehaviour
 
     void Update()
     {
-        if (currentLobby != null && AuthenticationService.Instance.PlayerId == currentLobby.HostId)
-        {
-            heartBeatTimer += Time.deltaTime;
-
-            if (heartBeatTimer >= heartBeatTimerLimit)
-            {
-                heartBeatTimer = 0f;
-                LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
-            }
-        }
+        HandleHeartbeat();
+        HandleLobbyPolling();
     }
     #endregion
 
@@ -52,6 +52,54 @@ public class MultiplayerLobbyManager : MonoBehaviour
         DebugLog($"Signed in as: {AuthenticationService.Instance.PlayerId}");
     }
     #endregion
+
+    #region POLLS
+    private void HandleHeartbeat()
+    {
+        if (currentLobby != null && AuthenticationService.Instance.PlayerId == currentLobby.HostId)
+        {
+            heartBeatTimer += Time.deltaTime;
+
+            if (heartBeatTimer >= heartBeatTimerLimit)
+            {
+                heartBeatTimer = 0f;
+                LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
+            }
+        }
+    }
+    private async Task HandleLobbyPolling()
+    {
+        if (currentLobby == null) return;
+        lobbyPollTimer += Time.deltaTime;
+
+        if (lobbyPollTimer >= lobbyPollTimerLimit)
+        {
+            lobbyPollTimer = 0f;
+
+            try
+            {
+                Lobby newLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
+                currentLobby = newLobby;
+
+                OnLobbyStateChanged?.Invoke(currentLobby);
+            }
+            catch (LobbyServiceException e)
+            {
+                if (e.Reason == LobbyExceptionReason.LobbyNotFound)
+                {
+                    DebugLog("Lobby was deleted.");
+                    currentLobby = null;
+                    // OnLobbyLeft?.Invoke();
+                }
+                else
+                {
+                    DebugLog("Polling error: " + e.Message);
+                }
+            }
+        }
+    }
+    #endregion
+
     #region API
 
     public async Task CreateLobby()
@@ -77,9 +125,27 @@ public class MultiplayerLobbyManager : MonoBehaviour
 
     public async Task JoinLobbyByCode(string lobbyCode)
     {
-        currentLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode);
+        var options = new JoinLobbyByCodeOptions
+        {
+            Player = new Player(
+                id: AuthenticationService.Instance.PlayerId,
+                data: new Dictionary<string, PlayerDataObject>
+                {
+                    {
+                        "Name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, "Client")
+                    }
+                }
+            )
+        };
+        currentLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
         string relayCode = currentLobby.Data["RelayCode"].Value;
         await JoinRelayAndStartClient(relayCode);
+    }
+
+    public async Task KickPlayer(string playerId)
+    {
+        if (AuthenticationService.Instance.PlayerId != currentLobby.HostId) return;
+        await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
     }
 
 
@@ -103,6 +169,7 @@ public class MultiplayerLobbyManager : MonoBehaviour
         transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "dtls"));
         NetworkManager.Singleton.StartHost();
 
+        OnLobbyCreated?.Invoke();
         DebugLog("Host started with Relay");
     }
 
@@ -115,6 +182,7 @@ public class MultiplayerLobbyManager : MonoBehaviour
 
         NetworkManager.Singleton.StartClient();
 
+        OnLobbyJoined?.Invoke();
         DebugLog("Client connected via Relay");
     }
 

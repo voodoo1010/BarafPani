@@ -118,6 +118,15 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""firegun"",
+                    ""type"": ""Button"",
+                    ""id"": ""5951d0f5-49eb-459a-8c34-55aad00a8091"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -197,6 +206,17 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
                     ""action"": ""fireHook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36f57bbf-711f-42a9-b4b3-1ff3b313d896"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""firegun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -208,6 +228,7 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
         m_Test_movement = m_Test.FindAction("movement", throwIfNotFound: true);
         m_Test_look = m_Test.FindAction("look", throwIfNotFound: true);
         m_Test_fireHook = m_Test.FindAction("fireHook", throwIfNotFound: true);
+        m_Test_firegun = m_Test.FindAction("firegun", throwIfNotFound: true);
     }
 
     ~@TestingControls()
@@ -291,6 +312,7 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Test_movement;
     private readonly InputAction m_Test_look;
     private readonly InputAction m_Test_fireHook;
+    private readonly InputAction m_Test_firegun;
     /// <summary>
     /// Provides access to input actions defined in input action map "Test".
     /// </summary>
@@ -314,6 +336,10 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Test/fireHook".
         /// </summary>
         public InputAction @fireHook => m_Wrapper.m_Test_fireHook;
+        /// <summary>
+        /// Provides access to the underlying input action "Test/firegun".
+        /// </summary>
+        public InputAction @firegun => m_Wrapper.m_Test_firegun;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -349,6 +375,9 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
             @fireHook.started += instance.OnFireHook;
             @fireHook.performed += instance.OnFireHook;
             @fireHook.canceled += instance.OnFireHook;
+            @firegun.started += instance.OnFiregun;
+            @firegun.performed += instance.OnFiregun;
+            @firegun.canceled += instance.OnFiregun;
         }
 
         /// <summary>
@@ -369,6 +398,9 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
             @fireHook.started -= instance.OnFireHook;
             @fireHook.performed -= instance.OnFireHook;
             @fireHook.canceled -= instance.OnFireHook;
+            @firegun.started -= instance.OnFiregun;
+            @firegun.performed -= instance.OnFiregun;
+            @firegun.canceled -= instance.OnFiregun;
         }
 
         /// <summary>
@@ -430,5 +462,12 @@ public partial class @TestingControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFireHook(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "firegun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFiregun(InputAction.CallbackContext context);
     }
 }

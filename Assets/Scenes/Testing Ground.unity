@@ -1449,6 +1449,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1345188952
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1345188954}
+  - component: {fileID: 1345188953}
+  m_Layer: 0
+  m_Name: SnowBallPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1345188953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345188952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2525942de40b90d4aa68b016a225fc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SnowballPool
+  _snowballPrefab: {fileID: 5924735127515585163, guid: c5756abd767ef8b4d9278b6eab54b03c, type: 3}
+  _initialPoolSize: 20
+--- !u!4 &1345188954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345188952}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 207.88249, y: 125.36542, z: -209.45233}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1445636420
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,6 +1694,7 @@ GameObject:
   - component: {fileID: 1576205037}
   - component: {fileID: 1576205036}
   - component: {fileID: 1576205038}
+  - component: {fileID: 1576205039}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1733,6 +1780,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _hookLineMaterial: {fileID: 2100000, guid: cb3979f53914f5340a1e270e62865fa6, type: 2}
+--- !u!114 &1576205039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576205034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306a45c5628a9b1478a4b63f25efc23a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SnowballGunController
+  _muzzlePoint: {fileID: 493105944}
+  _fireRate: 2
+  _snowballSpeed: 25
+  _gravityScale: 9.8
 --- !u!1 &2087145425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,3 +1915,4 @@ SceneRoots:
   - {fileID: 879746054}
   - {fileID: 2087145429}
   - {fileID: 1012016788}
+  - {fileID: 1345188954}

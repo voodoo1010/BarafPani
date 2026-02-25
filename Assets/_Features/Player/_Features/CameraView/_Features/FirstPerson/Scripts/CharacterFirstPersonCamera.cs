@@ -1,5 +1,6 @@
 using _Features.Player._Features.CameraView._Features.FirstPerson.Config.Scripts;
 using _Features.Player._Features.CameraView.Scripts;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace _Features.Player._Features.CameraView._Features.FirstPerson.Scripts
@@ -8,16 +9,31 @@ namespace _Features.Player._Features.CameraView._Features.FirstPerson.Scripts
     {
         [SerializeField] private CharacterFirstPersonCameraSettings firstPersonSettings;
 
-        private float _pitch;
+        private CinemachinePanTilt _panTilt;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            CinemachineCamera.Follow = Character.transform;
+
+            var follow = CinemachineCamera.GetComponent<CinemachineFollow>();
+            follow.FollowOffset = new Vector3(0f, firstPersonSettings.EyeHeight, 0f);
+
+            _panTilt = CinemachineCamera.GetComponent<CinemachinePanTilt>();
+            _panTilt.ReferenceFrame = CinemachinePanTilt.ReferenceFrames.World;
+        }
 
         protected override void ApplyLook(float yaw, float pitch)
         {
-            Character.transform.Rotate(Vector3.up, yaw);
+            _panTilt.PanAxis.Value += yaw;
+            _panTilt.TiltAxis.Value = Mathf.Clamp(
+                _panTilt.TiltAxis.Value + pitch,
+                firstPersonSettings.PitchClampMin,
+                firstPersonSettings.PitchClampMax
+            );
 
-            _pitch -= pitch;
-            _pitch = Mathf.Clamp(_pitch, firstPersonSettings.PitchClampMin, firstPersonSettings.PitchClampMax);
-
-            CinemachineCamera.transform.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
+            Character.transform.rotation = Quaternion.Euler(0f, _panTilt.PanAxis.Value, 0f);
         }
     }
 }

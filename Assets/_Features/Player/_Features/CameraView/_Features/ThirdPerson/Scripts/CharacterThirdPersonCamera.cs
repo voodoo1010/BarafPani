@@ -19,7 +19,8 @@ namespace _Features.Player._Features.CameraView._Features.ThirdPerson.Scripts
             base.Awake();
 
             _pivot = new GameObject("CameraPivot_ThirdPerson").transform;
-            _pivot.position = Character.transform.position;
+            _pivot.SetParent(Character.transform);
+            _pivot.localPosition = Vector3.zero;
 
             CinemachineCamera.Follow = _pivot;
             CinemachineCamera.LookAt = Character.transform;
@@ -37,11 +38,6 @@ namespace _Features.Player._Features.CameraView._Features.ThirdPerson.Scripts
             _pitch = Mathf.Clamp(_pitch, thirdPersonSettings.PitchClampMin, thirdPersonSettings.PitchClampMax);
 
             _pivot.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
-        }
-
-        private void LateUpdate()
-        {
-            _pivot.position = Character.transform.position;
         }
     }
 }

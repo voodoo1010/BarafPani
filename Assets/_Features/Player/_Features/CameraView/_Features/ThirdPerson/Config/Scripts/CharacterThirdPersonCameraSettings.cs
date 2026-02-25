@@ -7,6 +7,5 @@ namespace _Features.Player._Features.CameraView._Features.ThirdPerson.Config.Scr
     {
         public float PitchClampMin = -30f;
         public float PitchClampMax = 60f;
-        public float RotationSmoothSpeed = 10f;
     }
 }

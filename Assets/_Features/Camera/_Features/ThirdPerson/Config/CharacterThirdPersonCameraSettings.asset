@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView._Features.ThirdPerson.Config.Scripts.CharacterThirdPersonCameraSettings
   PitchClampMin: -30
   PitchClampMax: 60
-  RotationSmoothSpeed: 10
+  RotationSmoothSpeed: 1

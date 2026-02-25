@@ -12,11 +12,12 @@ namespace _Features.Player._Features.CameraView.Scripts
 
         protected CharacterCameraViewSettings CameraViewSettings => cameraViewSettings;
         protected CinemachineCamera CinemachineCamera => cinemachineCamera;
+        protected virtual Transform MovementReferenceTransform => cinemachineCamera.transform;
 
         private void OnEnable()
         {
             Character.OnLookInput += HandleLookInput;
-            Character.CameraTransform = cinemachineCamera.transform;
+            Character.CameraTransform = MovementReferenceTransform;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -24,7 +25,7 @@ namespace _Features.Player._Features.CameraView.Scripts
         private void OnDisable()
         {
             Character.OnLookInput -= HandleLookInput;
-            if (Character.CameraTransform == cinemachineCamera.transform)
+            if (Character.CameraTransform == MovementReferenceTransform)
                 Character.CameraTransform = null;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

@@ -300,3 +300,4 @@ MonoBehaviour:
   cameraViewSettings: {fileID: 11400000, guid: 7c1d9273b2a944044addf6c00e5c75fd, type: 2}
   cinemachineCamera: {fileID: 0}
   thirdPersonSettings: {fileID: 11400000, guid: 5afa28f8b373e214db706bbb1d03f283, type: 2}
+  cameraPivot: {fileID: 0}

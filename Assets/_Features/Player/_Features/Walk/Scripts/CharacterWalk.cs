@@ -29,7 +29,24 @@ namespace _Features.Player._Features.Walk.Scripts
         private void Update()
         {
             if (_moveInput == Vector2.zero) return;
-            Character.CharacterControllerUnityComponent.Move(new Vector3(_moveInput.x, 0f, _moveInput.y) * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime));
+
+            Vector3 direction = GetMoveDirection();
+            Character.CharacterControllerUnityComponent.Move(direction * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime));
+        }
+
+        private Vector3 GetMoveDirection()
+        {
+            Transform cam = Character.CameraTransform;
+            if (!cam) return new Vector3(_moveInput.x, 0f, _moveInput.y);
+
+            Vector3 forward = cam.forward;
+            Vector3 right = cam.right;
+            forward.y = 0f;
+            right.y = 0f;
+            forward.Normalize();
+            right.Normalize();
+
+            return forward * _moveInput.y + right * _moveInput.x;
         }
 
         private void HandleMove(Vector2 input)

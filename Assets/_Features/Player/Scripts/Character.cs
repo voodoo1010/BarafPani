@@ -32,13 +32,17 @@ namespace _Features.Player.Scripts
             Gizmos.color = IsGrounded ? Color.green : Color.red;
             Gizmos.DrawWireSphere(groundCheckTransform.position, characterSettings.GroundCheckRadius);
         }
+        public Transform CameraTransform { get; set; }
+
         public event Action<Vector2> OnMoveInput;
+        public event Action<Vector2> OnLookInput;
         public event Action<bool> OnSprintInput;
         public event Action<bool> OnCrouchInput;
         public event Action<bool> OnGrabInput;
         public event Action<bool> OnJumpInput;
 
         public void RaiseMoveInput(Vector2 input) => OnMoveInput?.Invoke(input);
+        public void RaiseLookInput(Vector2 delta) => OnLookInput?.Invoke(delta);
         public void RaiseSprintInput(bool pressed) => OnSprintInput?.Invoke(pressed);
         public void RaiseCrouchInput(bool pressed) => OnCrouchInput?.Invoke(pressed);
         public void RaiseGrabInput(bool pressed) => OnGrabInput?.Invoke(pressed);

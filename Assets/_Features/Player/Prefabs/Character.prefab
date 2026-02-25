@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 5990594160291989676}
   - component: {fileID: 2641132854892872536}
   - component: {fileID: 1539806886013619017}
+  - component: {fileID: 7770590299647276986}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -215,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInput
   moveAction: {fileID: -3977828962232948354, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  lookAction: {fileID: -1429493941395862347, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   sprintAction: {fileID: -3780055258321925678, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   crouchAction: {fileID: -52406771435755894, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   grabAction: {fileID: 0}
@@ -283,3 +285,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Sprint.Scripts.CharacterSprint
   characterSprintSettings: {fileID: 11400000, guid: 0d795a4b3c925984e9cb833be4c40bb6, type: 2}
+--- !u!114 &7770590299647276986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f9b07d2f4fb7494cb0e1b1a0bc2cc5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView._Features.ThirdPerson.Scripts.CharacterThirdPersonCamera
+  cameraViewSettings: {fileID: 11400000, guid: 7c1d9273b2a944044addf6c00e5c75fd, type: 2}
+  cinemachineCamera: {fileID: 0}
+  thirdPersonSettings: {fileID: 11400000, guid: 5afa28f8b373e214db706bbb1d03f283, type: 2}

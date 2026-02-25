@@ -9,6 +9,7 @@ namespace _Features.Player._Features.Input
     {
         [Header("Input Actions")]
         [SerializeField] private InputActionReference moveAction;
+        [SerializeField] private InputActionReference lookAction;
         [SerializeField] private InputActionReference sprintAction;
         [SerializeField] private InputActionReference crouchAction;
         [SerializeField] private InputActionReference grabAction;
@@ -24,6 +25,7 @@ namespace _Features.Player._Features.Input
         private void OnEnable()
         {
             EnableAction(moveAction, OnMove);
+            EnableAction(lookAction, OnLook);
             EnableAction(sprintAction, OnSprint);
             EnableAction(crouchAction, OnCrouch);
             EnableAction(grabAction, OnGrab);
@@ -33,6 +35,7 @@ namespace _Features.Player._Features.Input
         private void OnDisable()
         {
             DisableAction(moveAction, OnMove);
+            DisableAction(lookAction, OnLook);
             DisableAction(sprintAction, OnSprint);
             DisableAction(crouchAction, OnCrouch);
             DisableAction(grabAction, OnGrab);
@@ -57,6 +60,11 @@ namespace _Features.Player._Features.Input
         private void OnMove(InputAction.CallbackContext ctx)
         {
             _character.RaiseMoveInput(ctx.ReadValue<Vector2>());
+        }
+
+        private void OnLook(InputAction.CallbackContext ctx)
+        {
+            _character.RaiseLookInput(ctx.ReadValue<Vector2>());
         }
 
         private void OnSprint(InputAction.CallbackContext ctx)

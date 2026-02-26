@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0aa92e3c7e213242bab71060255f7e4, type: 3}
+  m_Name: CharacterThirdPersonCameraSettings
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView._Features.ThirdPerson.Config.Scripts.CharacterThirdPersonCameraSettings
+  PitchClampMin: -30
+  PitchClampMax: 60
+  RotationSmoothSpeed: 1

@@ -1,4 +1,6 @@
 using System;
+using _Features.Player.Config.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Player.Scripts
@@ -6,11 +8,10 @@ namespace _Features.Player.Scripts
     public class Character : MonoBehaviour
     {
         [SerializeField] private CharacterController characterControllerUnityComponent;
-
-        [Header("Ground Check")]
-        [SerializeField] private Transform groundCheckPoint;
-        [SerializeField] private float groundCheckRadius = 0.2f;
-        [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private CharacterSettings characterSettings;
+        [HorizontalLine("Ground Check Specific", 1, FixedColor.Black)]
+        [MessageBox("Kept this here so the position is taken from a child within the GameObject, keeps positions local.", MessageBoxType.Info)]
+        [SerializeField] private Transform groundCheckTransform;
 
         public CharacterController CharacterControllerUnityComponent => characterControllerUnityComponent;
 
@@ -23,22 +24,25 @@ namespace _Features.Player.Scripts
 
         private void CheckGround()
         {
-            IsGrounded = Physics.CheckSphere(groundCheckPoint.position, groundCheckRadius, groundLayer);
+            IsGrounded = Physics.CheckSphere(groundCheckTransform.position, characterSettings.GroundCheckRadius, characterSettings.GroundLayer);
         }
 
         private void OnDrawGizmosSelected()
         {
-            if (!groundCheckPoint) return;
             Gizmos.color = IsGrounded ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(groundCheckPoint.position, groundCheckRadius);
+            Gizmos.DrawWireSphere(groundCheckTransform.position, characterSettings.GroundCheckRadius);
         }
+        public Transform CameraTransform { get; set; }
+
         public event Action<Vector2> OnMoveInput;
+        public event Action<Vector2> OnLookInput;
         public event Action<bool> OnSprintInput;
         public event Action<bool> OnCrouchInput;
         public event Action<bool> OnGrabInput;
         public event Action<bool> OnJumpInput;
 
         public void RaiseMoveInput(Vector2 input) => OnMoveInput?.Invoke(input);
+        public void RaiseLookInput(Vector2 delta) => OnLookInput?.Invoke(delta);
         public void RaiseSprintInput(bool pressed) => OnSprintInput?.Invoke(pressed);
         public void RaiseCrouchInput(bool pressed) => OnCrouchInput?.Invoke(pressed);
         public void RaiseGrabInput(bool pressed) => OnGrabInput?.Invoke(pressed);

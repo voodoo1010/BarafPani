@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 
 public class SnowballProjectile : MonoBehaviour
@@ -7,6 +6,11 @@ public class SnowballProjectile : MonoBehaviour
     private float _gravityScale;
     private bool _isActive;
     private static int _runnerLayer = -1;
+
+    [Tooltip("Seconds until the projectile self-destructs if it doesn't hit anything")]
+    [SerializeField] private float _lifeTime = 8f;
+
+    private float _lifeTimer;
 
     private void Awake()
     {
@@ -19,6 +23,7 @@ public class SnowballProjectile : MonoBehaviour
         _velocity = direction.normalized * speed;
         _gravityScale = gravityScale;
         _isActive = true;
+        _lifeTimer = _lifeTime;
     }
 
     private void Update()
@@ -27,6 +32,9 @@ public class SnowballProjectile : MonoBehaviour
 
         SnowballDropOff();
 
+        _lifeTimer -= Time.deltaTime;
+        if (_lifeTimer <= 0f)
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,20 +46,13 @@ public class SnowballProjectile : MonoBehaviour
             OnHitRunner(other);
         }
 
-        Deactivate();
+        Destroy(gameObject);
     }
 
     private void OnHitRunner(Collider runnerCollider)
     {
         // TODO: do something to the runner here later
-        UnityEngine.Debug.Log("Snowball hit runner");
-    }
-
-    private void Deactivate()
-    {
-        _isActive = false;
-        _velocity = Vector3.zero;
-        SnowballPool.Instance.ReturnToPool(this);
+        Debug.Log("Snowball hit runner");
     }
 
     private void SnowballDropOff()

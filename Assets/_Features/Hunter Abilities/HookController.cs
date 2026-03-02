@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,17 +13,27 @@ public class HookController : MonoBehaviour
 
     [Tooltip("The maximum distance at which the hook can be pulled")]
     [SerializeField] private float _maxHookDistance = 30f;
+
+    [Tooltip("The cooldown between shots")]
+    [SerializeField] private float _fireCooldown = 1.5f;
+
     [SerializeField] private Transform _hookOrigin;
     [SerializeField] private Camera _fpsCamera;
 
     [Header("Layer")]
     [SerializeField] private LayerMask _runnerLayer;
 
-    [Header("Visuals")]
-    [SerializeField] private Material _hookLineMaterial;
+    [Header("Prefabs")]
+    [Tooltip("Assign a HookProjectile prefab (must have the HookProjectile component and a configured LineRenderer).")]
+    [SerializeField] private HookProjectile _hookPrefab;
 
     private TestingControls _controls;
     private HookProjectile _activeHook;
+    private bool _isOnCooldown;
+    private float _cooldownRemaining;
+
+    public bool IsOnCooldown => _isOnCooldown;
+    public float CooldownRemaining => (_isOnCooldown ? _cooldownRemaining : 0f);
 
     private void Awake()
     {
@@ -43,12 +54,18 @@ public class HookController : MonoBehaviour
 
     private void OnFireHookPerformed(InputAction.CallbackContext context)
     {
-        if (_activeHook != null) return;
+        if (_activeHook != null || _isOnCooldown) return;
         FireHook();
     }
 
     private void FireHook()
     {
+        if (_hookPrefab == null)
+        {
+            Debug.LogError("HookController: _hookPrefab is not assigned in inspector.");
+            return;
+        }
+
         // Raycast from center of screen
         Ray aimRay = _fpsCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
@@ -65,9 +82,8 @@ public class HookController : MonoBehaviour
         // Aim direction
         Vector3 aimDirection = (targetPoint - _hookOrigin.position).normalized;
 
-        // Spawn hook object
-        var hookGo = new GameObject("Hook");
-        _activeHook = hookGo.AddComponent<HookProjectile>();
+        HookProjectile hookInstance = Instantiate(_hookPrefab, _hookOrigin.position, Quaternion.identity);
+        _activeHook = hookInstance;
 
         _activeHook.Initialize(
             origin: _hookOrigin,
@@ -76,8 +92,28 @@ public class HookController : MonoBehaviour
             pullSpeed: _pullSpeed,
             maxDistance: _maxHookDistance,
             runnerLayer: _runnerLayer,
-            lineMaterial: _hookLineMaterial,
-            onFinished: () => _activeHook = null
+            onFinished: OnHookFinished
         );
+    }
+
+    private void OnHookFinished()
+    {
+        _activeHook = null;
+        StartCoroutine(FireCooldownRoutine());
+    }
+
+    private IEnumerator FireCooldownRoutine()
+    {
+        _isOnCooldown = true;
+        _cooldownRemaining = _fireCooldown;
+
+        while (_cooldownRemaining > 0f)
+        {
+            _cooldownRemaining -= Time.deltaTime;
+            yield return null;
+        }
+
+        _isOnCooldown = false;
+        _cooldownRemaining = 0f;
     }
 }

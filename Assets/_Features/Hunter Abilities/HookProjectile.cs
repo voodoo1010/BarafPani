@@ -11,7 +11,6 @@ public class HookProjectile : MonoBehaviour
     private float _pullSpeed;
     private float _maxDistance;
     private LayerMask _runnerLayer;
-    private Material _lineMaterial;
     private Action _onFinished;
 
     private HookState _state = HookState.Launching;
@@ -26,7 +25,6 @@ public class HookProjectile : MonoBehaviour
         float pullSpeed,
         float maxDistance,
         LayerMask runnerLayer,
-        Material lineMaterial,
         Action onFinished)
     {
         _origin = origin;
@@ -35,8 +33,11 @@ public class HookProjectile : MonoBehaviour
         _pullSpeed = pullSpeed;
         _maxDistance = maxDistance;
         _runnerLayer = runnerLayer;
-        _lineMaterial = lineMaterial;
         _onFinished = onFinished;
+
+        _state = HookState.Launching;
+        _caughtTarget = null;
+        _distanceTravelled = 0f;
 
         transform.position = origin.position;
         SetupLineRenderer();
@@ -44,12 +45,14 @@ public class HookProjectile : MonoBehaviour
 
     private void SetupLineRenderer()
     {
-        _lineRenderer = gameObject.AddComponent<LineRenderer>();
+        _lineRenderer = GetComponent<LineRenderer>();
+        if (_lineRenderer == null)
+        {
+            _lineRenderer = gameObject.AddComponent<LineRenderer>();
+        }
+
         _lineRenderer.positionCount = 2;
-        _lineRenderer.startWidth = 0.05f;
-        _lineRenderer.endWidth = 0.05f;
         _lineRenderer.useWorldSpace = true;
-        _lineRenderer.material = _lineMaterial;
     }
 
     private void Update()
@@ -61,7 +64,8 @@ public class HookProjectile : MonoBehaviour
             case HookState.Retracting: HandleRetracting(); break;
         }
 
-        UpdateLineRenderer();
+        if (_lineRenderer != null && _origin != null)
+            UpdateLineRenderer();
     }
 
     private void HandleLaunching()
@@ -85,6 +89,7 @@ public class HookProjectile : MonoBehaviour
             {
                 _caughtTarget = hit.collider.transform;
                 _state = HookState.Pulling;
+                transform.position = hit.point;
             }
             else
             {
@@ -141,5 +146,3 @@ public class HookProjectile : MonoBehaviour
         Destroy(gameObject);
     }
 }
-
-

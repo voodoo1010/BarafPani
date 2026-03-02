@@ -3,11 +3,13 @@
   <Project Path="ExternAttributes.Editor.csproj" />
   <Project Path="CustomInspector.Editor.csproj" />
   <Project Path="CustomInspector.Documentation.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unity.RenderPipelines.Core.Samples.Runtime.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="CustomInspector.csproj" />
   <Project Path="CustomInspector.Helpers.Editor.csproj" />
   <Project Path="FlatKit.Utils.Editor.csproj" />
   <Project Path="CustomInspector.Demo.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unity.RenderPipelines.Core.Samples.Editor.csproj" />
   <Project Path="CustomInspector.Helpers.csproj" />
 </Solution>

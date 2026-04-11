@@ -34,7 +34,7 @@ namespace _Features.Player._Features.CameraView.Scripts
         private void HandleLookInput(Vector2 delta)
         {
             float scaledX = delta.x * cameraViewSettings.HorizontalSensitivity;
-            float scaledY = delta.y * cameraViewSettings.VerticalSensitivity;
+            float scaledY = delta.y * cameraViewSettings.VerticalSensitivity * -1f;
             ApplyLook(scaledX, scaledY);
         }
 

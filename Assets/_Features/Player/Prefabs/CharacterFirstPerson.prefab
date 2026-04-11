@@ -138,8 +138,9 @@ GameObject:
   - component: {fileID: 2641132854892872536}
   - component: {fileID: 1539806886013619017}
   - component: {fileID: 5933510809653711024}
+  - component: {fileID: 769109406483390934}
   m_Layer: 0
-  m_Name: Character
+  m_Name: CharacterFirstPerson
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -200,11 +201,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player.Scripts.Character
   characterControllerUnityComponent: {fileID: 5827182343140277596}
-  groundCheckPoint: {fileID: 3799011006865307001}
-  groundCheckRadius: 0.2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  characterSettings: {fileID: 11400000, guid: 2c0bac2bc295a1c49b6635e4c87b88a5, type: 2}
+  groundCheckTransform: {fileID: 3799011006865307001}
 --- !u!114 &6331501940541924290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInput
   moveAction: {fileID: -3977828962232948354, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  lookAction: {fileID: -1429493941395862347, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   sprintAction: {fileID: -3780055258321925678, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   crouchAction: {fileID: -52406771435755894, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   grabAction: {fileID: 0}
@@ -234,9 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36955add2162bcd4aa11fe226b1d6728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Crouch.Scripts.CharacterCrouch
-  crouchHeight: 1
-  transitionDuration: 0.3
-  crouchSpeedMultiplier: 0.5
+  crouchSettings: {fileID: 11400000, guid: 14f8735d461f23244a01030bbe08099d, type: 2}
 --- !u!114 &5990594160291989676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3972348e30fbeaa49949492070b78461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Walk.Scripts.CharacterWalk
-  speed: 5
+  characterWalkSettings: {fileID: 11400000, guid: 5cf8929d24ba90040b6f0e42eef03608, type: 2}
 --- !u!114 &1539806886013619017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694b877b606c3934f84fb0f81dec4dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Sprint.Scripts.CharacterSprint
-  sprintMultiplier: 1.5
+  characterSprintSettings: {fileID: 11400000, guid: 0d795a4b3c925984e9cb833be4c40bb6, type: 2}
 --- !u!114 &5933510809653711024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,5 +284,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e300d6a385b8924f96f3ea085bc260a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Jump.Scripts.CharacterJump
-  jumpHeight: 2
-  gravity: -20
+  characterJumpSettings: {fileID: 11400000, guid: 83eabc39d7803ad419904616ab2cba9e, type: 2}
+--- !u!114 &769109406483390934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d83a46c38fcab974a8587d190d8b2948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView._Features.FirstPerson.Scripts.CharacterFirstPersonCamera
+  cameraViewSettings: {fileID: 11400000, guid: 7c1d9273b2a944044addf6c00e5c75fd, type: 2}
+  cinemachineCamera: {fileID: 0}
+  firstPersonSettings: {fileID: 11400000, guid: 4e724e3d27e2c9447aada8b3274891ed, type: 2}

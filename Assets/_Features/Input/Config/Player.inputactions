@@ -190,7 +190,7 @@
                     "id": "145445f2-a1ad-4759-8f87-0eb6fae769ae",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "DeltaTimeScale,ScaleVector2(x=0.1,y=0.1)",
+                    "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,

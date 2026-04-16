@@ -1,136 +1,85 @@
+using _Features.Abilities.Core.Scripts;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class SnowballGunController : MonoBehaviour
+namespace _Features.Abilities.Hunter
 {
-    [Header("References")]
-    [SerializeField] private Transform _muzzlePoint;
-    [SerializeField] private SnowballProjectile _snowballPrefab;
-
-    [Header("Fire Settings")]
-    [Tooltip("Shots per second")]
-    [SerializeField] private float _fireRate = 2f; // rate limiter (time between shots)
-
-    [Tooltip("Speed of the snowball")]
-    [SerializeField] private float _snowballSpeed = 20f;
-
-    [Tooltip("Gravity of the snowball")]
-    [SerializeField] private float _gravityScale = 9.8f;
-
-    [Header("Ammo Settings")]
-    [Tooltip("How many shots the ability allows before going on cooldown")]
-    [SerializeField] private int _maxAmmo = 10;
-
-    [Tooltip("Seconds the ability is unavailable after ammo is exhausted")]
-    [SerializeField] private float _abilityCooldown = 5f;
-
-    private TestingControls _controls;
-    private float _fireCooldownTimer;
-    private float _abilityCooldownTimer;
-    private int _currentAmmo;
-    private bool _isAbilityOnCooldown;
-    private Camera _mainCamera;
-
-    private void Awake()
+    public class SnowballGunController : AbilityBase
     {
-        _controls = new TestingControls();
-        _mainCamera = Camera.main;
-        _currentAmmo = _maxAmmo;
-        _isAbilityOnCooldown = false;
-    }
+        [Header("References")]
+        [SerializeField] private Transform _muzzlePoint;
+        [SerializeField] private SnowballProjectile _snowballPrefab;
 
-    private void OnEnable()
-    {
-        _controls.Test.Enable();
-        _controls.Test.firegun.performed += OnFiregunPerformed;
-    }
+        [Header("Fire Settings")]
+        [Tooltip("Shots per second while held (intra-ability rate limiter).")]
+        [SerializeField] private float _fireRate = 2f;
 
-    private void OnDisable()
-    {
-        _controls.Test.firegun.performed -= OnFiregunPerformed;
-        _controls.Test.Disable();
-    }
+        [SerializeField] private float _snowballSpeed = 20f;
+        [SerializeField] private float _gravityScale = 9.8f;
 
-    private void Update()
-    {
-        if (_fireCooldownTimer > 0f)
-            _fireCooldownTimer -= Time.deltaTime;
+        [Header("Ammo Settings")]
+        [Tooltip("Shots per activation before the ammo is exhausted and the cooldown (from AbilityData) starts.")]
+        [SerializeField] private int _maxAmmo = 10;
 
-        if (_isAbilityOnCooldown)
+        private float _fireCooldownTimer;
+        private int _currentAmmo;
+        private Camera _mainCamera;
+
+        protected override void OnAcquiredInternal()
         {
-            _abilityCooldownTimer -= Time.deltaTime;
-            if (_abilityCooldownTimer <= 0f)
-                FinishAbilityCooldown();
-        }
-    }
-
-    private void OnFiregunPerformed(InputAction.CallbackContext context)
-    {
-        Fire();
-    }
-
-    private void Fire()
-    {
-        if (_fireCooldownTimer > 0f) return;
-
-        if (_isAbilityOnCooldown)
-        {
-            Debug.Log($"Ability still on cooldown: {_abilityCooldownTimer:0.00}s remaining");
-            return;
+            _mainCamera = Camera.main;
+            _currentAmmo = _maxAmmo;
+            _fireCooldownTimer = 0f;
         }
 
-        if (_currentAmmo <= 0)
+        protected override void Update()
         {
-            StartAbilityCooldown();
-            return;
+            base.Update();
+
+            if (_fireCooldownTimer > 0f)
+                _fireCooldownTimer -= Time.deltaTime;
+
+            if (CooldownRemaining <= 0f && _currentAmmo <= 0)
+                _currentAmmo = _maxAmmo;
         }
 
-        Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit, 500f)
-            ? hit.point
-            : ray.GetPoint(500f);
+        protected override bool OnActivateInternal()
+        {
+            if (_fireCooldownTimer > 0f) return false;
+            if (_currentAmmo <= 0) return false;
+            if (_muzzlePoint == null || _snowballPrefab == null || _mainCamera == null)
+            {
+                Debug.LogError("[SnowballGun] References not assigned.");
+                return false;
+            }
 
-        Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
+            Fire();
+            return true;
+        }
 
-        SnowballProjectile snowball = Instantiate(
-            _snowballPrefab,
-            _muzzlePoint.position,
-            Quaternion.LookRotation(fireDirection)
-        );
+        private void Fire()
+        {
+            Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit, 500f)
+                ? hit.point
+                : ray.GetPoint(500f);
 
-        snowball.Launch(fireDirection, _snowballSpeed, _gravityScale);
+            Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
 
-        _currentAmmo--;
-        _fireCooldownTimer = 1f / _fireRate;
+            SnowballProjectile snowball = Instantiate(
+                _snowballPrefab,
+                _muzzlePoint.position,
+                Quaternion.LookRotation(fireDirection)
+            );
+            snowball.Launch(fireDirection, _snowballSpeed, _gravityScale);
 
-        Debug.Log($"Fired. Ammo remaining: {_currentAmmo}/{_maxAmmo}");
+            _currentAmmo--;
+            _fireCooldownTimer = 1f / _fireRate;
 
-        if (_currentAmmo <= 0)
-            StartAbilityCooldown();
+            if (_currentAmmo <= 0)
+                ConsumeActivation();
+        }
+
+        public int GetCurrentAmmo() => _currentAmmo;
+        public int GetMaxAmmo() => _maxAmmo;
     }
-
-    private void StartAbilityCooldown()
-    {
-        if (_isAbilityOnCooldown) return;
-
-        _isAbilityOnCooldown = true;
-        _abilityCooldownTimer = _abilityCooldown;
-        Debug.Log($"Ability used up. Entering cooldown for {_abilityCooldown:0.00}s");
-        //  disable HUD ability icon / play VFX
-    }
-
-    private void FinishAbilityCooldown()
-    {
-        _isAbilityOnCooldown = false;
-        _currentAmmo = _maxAmmo;
-        _abilityCooldownTimer = 0f;
-        Debug.Log("Ability cooldown finished. Ammo restored.");
-        //  re-enable HUD ability icon / play VFX
-    }
-
-    // Public helpers for other scripts
-    public int GetCurrentAmmo() => _currentAmmo;
-    public int GetMaxAmmo() => _maxAmmo;
-    public bool IsAbilityOnCooldown() => _isAbilityOnCooldown;
-    public float GetAbilityCooldownRemaining() => _abilityCooldownTimer;
 }

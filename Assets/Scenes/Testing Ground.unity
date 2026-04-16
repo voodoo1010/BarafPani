@@ -668,7 +668,7 @@ MonoBehaviour:
   ReferenceFrame: 0
   RecenterTarget: 0
   PanAxis:
-    Value: 4.6
+    Value: 4.600006
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -1728,7 +1728,6 @@ MonoBehaviour:
   _hookSpeed: 50
   _pullSpeed: 50
   _maxHookDistance: 30
-  _fireCooldown: 5
   _hookOrigin: {fileID: 493105944}
   _fpsCamera: {fileID: 330585545}
   _runnerLayer:
@@ -1753,7 +1752,6 @@ MonoBehaviour:
   _snowballSpeed: 25
   _gravityScale: 9.8
   _maxAmmo: 10
-  _abilityCooldown: 5
 --- !u!1 &2087145425
 GameObject:
   m_ObjectHideFlags: 0

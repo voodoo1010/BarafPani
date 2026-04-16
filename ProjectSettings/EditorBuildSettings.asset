@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testing Ground.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Debug-TestingGrounds/Scenes/PlayerController.unity
+    guid: 09eae400a1089c644a0816d92ce0bec3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   m_UseUCBPForAssetBundles: 0

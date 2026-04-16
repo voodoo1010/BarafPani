@@ -121,6 +121,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2085642883902926064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6364446403706814895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5404932393783783063}
+  m_Layer: 0
+  m_Name: AbilityOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5404932393783783063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6364446403706814895}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2085642883902926064}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8923762327679711103
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,6 +170,7 @@ GameObject:
   - component: {fileID: 1539806886013619017}
   - component: {fileID: 5933510809653711024}
   - component: {fileID: 769109406483390934}
+  - component: {fileID: 2472331838444793101}
   m_Layer: 0
   m_Name: CharacterFirstPerson
   m_TagString: Untagged
@@ -161,6 +193,7 @@ Transform:
   m_Children:
   - {fileID: 1242696850610057061}
   - {fileID: 3799011006865307001}
+  - {fileID: 5404932393783783063}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &5827182343140277596
@@ -300,3 +333,23 @@ MonoBehaviour:
   cameraViewSettings: {fileID: 11400000, guid: 7c1d9273b2a944044addf6c00e5c75fd, type: 2}
   cinemachineCamera: {fileID: 0}
   firstPersonSettings: {fileID: 11400000, guid: 4e724e3d27e2c9447aada8b3274891ed, type: 2}
+--- !u!114 &2472331838444793101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c48585123b2adf4bb954478de2bedf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Core.Scripts.HunterAbilityManager
+  abilityParent: {fileID: 2085642883902926064}
+  abilityOrigin: {fileID: 5404932393783783063}
+  abilityCamera: {fileID: 0}
+  pool: {fileID: 11400000, guid: a920828ee9c62344fb83792125b4b2fc, type: 2}
+  rollOnAwake: 1
+  rollSeed: -1
+  ability1Action: {fileID: -1177821007492800487, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  ability2Action: {fileID: 6852644961083374836, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}

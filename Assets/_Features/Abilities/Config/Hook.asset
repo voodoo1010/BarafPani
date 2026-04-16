@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3013e651dcbac843b5b1402fdb258bf, type: 3}
+  m_Name: Hook
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Core.Scripts.AbilityData
+  abilityId: 0
+  displayName: Hook
+  icon: {fileID: 0}
+  uiColor: {r: 0, g: 0.12064552, b: 1, a: 1}
+  abilityPrefab: {fileID: 7367766459597976259, guid: 9449de1a7605c0547b2c0065c3d7a7ea, type: 3}
+  cooldown: 5
+  maxCharges: 1
+  consumeOnEmpty: 1
+  hunterPool: 1
+  runnerPool: 0

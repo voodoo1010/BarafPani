@@ -230,6 +230,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Hunter",
+            "id": "85ece319-0c9c-4573-9198-ba3d1bc52da3",
+            "actions": [
+                {
+                    "name": "AbilityOne",
+                    "type": "Button",
+                    "id": "5dba8e56-a0ea-4105-94d3-1d5423a73a00",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AbilityTwo",
+                    "type": "Button",
+                    "id": "4b52568b-b731-4bad-8008-6a3d06d3adce",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e4e92fb0-488b-4ccc-854e-10badf5e7ab6",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AbilityOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7a97ff2-fd3b-494c-8171-41d1029d950f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AbilityTwo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

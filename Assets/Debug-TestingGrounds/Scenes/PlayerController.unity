@@ -130,6 +130,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+--- !u!4 &434950997 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2085642883902926064, guid: eaacf673019416241bcf997f6df0dca2, type: 3}
+  m_PrefabInstance: {fileID: 1619156171}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1099624546
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +223,7 @@ Transform:
   m_GameObject: {fileID: 1099624546}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.245, z: 0.75}
+  m_LocalPosition: {x: 8.04297, y: 2.13, z: 2.71878}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -759,15 +764,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 8.04297
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.245
+      value: 2.13
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.75
+      value: 2.71878
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalRotation.w
@@ -804,7 +809,7 @@ PrefabInstance:
     - target: {fileID: 7032439476015672760, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 434950997}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

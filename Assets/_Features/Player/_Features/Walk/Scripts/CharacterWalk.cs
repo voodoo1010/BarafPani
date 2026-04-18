@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Features.Player._Features.Walk.Scripts
 {
-    public class CharacterWalk : CharacterFeature
+    public class CharacterWalk : CharacterFeature, IMovementDataProvider
     {
         [SerializeField] private CharacterWalkSettings characterWalkSettings;
         //TODO: put this data shit in scriptableojects
@@ -12,6 +12,7 @@ namespace _Features.Player._Features.Walk.Scripts
         public float CrouchSpeedMultiplier { get; set; } = 1f;
 
         private Vector2 _moveInput;
+        public Vector2 MoveInput => _moveInput;
 
         private void OnEnable()
         {

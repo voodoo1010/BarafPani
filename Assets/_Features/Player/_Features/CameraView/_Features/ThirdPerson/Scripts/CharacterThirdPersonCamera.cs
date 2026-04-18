@@ -1,12 +1,14 @@
 using _Features.Player._Features.CameraView._Features.ThirdPerson.Config.Scripts;
 using _Features.Player._Features.CameraView.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Player._Features.CameraView._Features.ThirdPerson.Scripts
 {
     public class CharacterThirdPersonCamera : CharacterCameraView
     {
-        [SerializeField] private CharacterThirdPersonCameraSettings thirdPersonSettings;
+        [SerializeField, ForceFill, Tooltip("ScriptableObject with third-person pitch clamp settings")]
+        private CharacterThirdPersonCameraSettings thirdPersonSettings;
 
         private Transform _pivot;
         private float _yaw;

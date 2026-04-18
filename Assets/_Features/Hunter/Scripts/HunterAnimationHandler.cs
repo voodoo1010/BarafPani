@@ -10,7 +10,8 @@ namespace _Features.Hunter.Scripts
         private static readonly int BlendX = Animator.StringToHash("BlendX");
         private static readonly int BlendY = Animator.StringToHash("BlendY");
 
-        [SerializeField] private float blendSmoothing = 10f;
+        [SerializeField, Range(0.1f, 50f), Tooltip("Exponential blend speed for animation transitions. Higher = snappier.")]
+        private float blendSmoothing = 10f;
 
         private Animator _animator;
         private IMovementDataProvider _movementDataProvider;

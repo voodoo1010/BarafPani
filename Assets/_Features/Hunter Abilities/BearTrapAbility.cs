@@ -1,5 +1,6 @@
 using System.Collections;
 using _Features.Abilities.Core.Scripts;
+using CustomInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,24 +9,28 @@ namespace _Features.Abilities.Hunter
     public class BearTrapAbility : AbilityBase
     {
         [Header("Prefabs")]
-        [Tooltip("The actual bear trap prefab. Must have BearTrapObject.cs + a Trigger Collider.")]
+        [Tooltip("The actual bear trap prefab. Must have BearTrapObject.cs + a Trigger Collider."), ForceFill]
         public GameObject TrapPrefab;
 
-        [Tooltip("Ghost/preview prefab shown during placement (transparent, no BearTrapObject script).")]
+        [Tooltip("Ghost/preview prefab shown during placement (transparent, no BearTrapObject script)."), ForceFill]
         public GameObject TrapGhostPrefab;
 
         [Header("Placement")]
+        [Tooltip("Maximum raycast distance for placing traps"), Range(1f, 50f)]
         public float MaxPlaceDistance = 8f;
+        [Tooltip("Vertical offset above ground for trap placement"), Range(0f, 1f)]
         public float GroundOffset = 0.05f;
 
         [Header("Trap Limit")]
-        [Tooltip("Maximum number of traps that can exist at once. 0 = unlimited.")]
+        [Tooltip("Maximum number of traps that can exist at once. 0 = unlimited."), Range(0, 10)]
         public int MaxTrapsActive = 3;
 
         [Header("Layer Mask")]
+        [Tooltip("Layers considered valid ground for trap placement")]
         public LayerMask GroundLayer;
 
         [Header("UI (Optional)")]
+        [Tooltip("Radial fill image showing cooldown progress")]
         public UnityEngine.UI.Image CooldownRadialUI;
 
         private bool _isPlacing;

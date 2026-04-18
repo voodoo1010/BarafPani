@@ -7,7 +7,7 @@ public class SnowballProjectile : MonoBehaviour
     private bool _isActive;
     private static int _runnerLayer = -1;
 
-    [Tooltip("Seconds until the projectile self-destructs if it doesn't hit anything")]
+    [Tooltip("Seconds until the projectile self-destructs if it doesn't hit anything"), Range(1f, 30f)]
     [SerializeField] private float _lifeTime = 8f;
 
     private float _lifeTimer;

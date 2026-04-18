@@ -1,5 +1,6 @@
 using _Features.Player._Features.CameraView.Config.Scripts;
 using _Features.Player.Scripts;
+using CustomInspector;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -7,8 +8,11 @@ namespace _Features.Player._Features.CameraView.Scripts
 {
     public abstract class CharacterCameraView : CharacterFeature
     {
-        [SerializeField] private CharacterCameraViewSettings cameraViewSettings;
-        [SerializeField] private CinemachineCamera cinemachineCamera;
+        [HorizontalLine("Camera", 1, FixedColor.Cyan)]
+        [SerializeField, ForceFill, Tooltip("ScriptableObject with mouse sensitivity settings")]
+        private CharacterCameraViewSettings cameraViewSettings;
+        [SerializeField, ForceFill, Tooltip("Cinemachine virtual camera for this view mode")]
+        private CinemachineCamera cinemachineCamera;
 
         protected CharacterCameraViewSettings CameraViewSettings => cameraViewSettings;
         protected CinemachineCamera CinemachineCamera => cinemachineCamera;

@@ -1,4 +1,5 @@
 using _Features.Player.Scripts;
+using CustomInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,13 +8,19 @@ namespace _Features.Player._Features.Input
     [RequireComponent(typeof(Character))]
     public class CharacterInput : MonoBehaviour
     {
-        [Header("Input Actions")]
-        [SerializeField] private InputActionReference moveAction;
-        [SerializeField] private InputActionReference lookAction;
-        [SerializeField] private InputActionReference sprintAction;
-        [SerializeField] private InputActionReference crouchAction;
-        [SerializeField] private InputActionReference grabAction;
-        [SerializeField] private InputActionReference jumpAction;
+        [HorizontalLine("Input Actions", 1, FixedColor.Cyan)]
+        [SerializeField, ForceFill, Tooltip("Player movement input (WASD/stick)")]
+        private InputActionReference moveAction;
+        [SerializeField, ForceFill, Tooltip("Camera look input (mouse/stick)")]
+        private InputActionReference lookAction;
+        [SerializeField, Tooltip("Sprint toggle input")]
+        private InputActionReference sprintAction;
+        [SerializeField, Tooltip("Crouch toggle input")]
+        private InputActionReference crouchAction;
+        [SerializeField, Tooltip("Grab interaction input")]
+        private InputActionReference grabAction;
+        [SerializeField, Tooltip("Jump input")]
+        private InputActionReference jumpAction;
 
         private Character _character;
 
@@ -22,7 +29,7 @@ namespace _Features.Player._Features.Input
             _character = GetComponent<Character>();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             EnableAction(moveAction, OnMove);
             EnableAction(lookAction, OnLook);
@@ -32,7 +39,7 @@ namespace _Features.Player._Features.Input
             EnableAction(jumpAction, OnJump);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             DisableAction(moveAction, OnMove);
             DisableAction(lookAction, OnLook);
@@ -42,7 +49,7 @@ namespace _Features.Player._Features.Input
             DisableAction(jumpAction, OnJump);
         }
 
-        private void EnableAction(InputActionReference actionRef, System.Action<InputAction.CallbackContext> callback)
+        protected void EnableAction(InputActionReference actionRef, System.Action<InputAction.CallbackContext> callback)
         {
             if (!actionRef) return;
             actionRef.action.performed += callback;
@@ -50,7 +57,7 @@ namespace _Features.Player._Features.Input
             actionRef.action.Enable();
         }
 
-        private void DisableAction(InputActionReference actionRef, System.Action<InputAction.CallbackContext> callback)
+        protected void DisableAction(InputActionReference actionRef, System.Action<InputAction.CallbackContext> callback)
         {
             if (!actionRef) return;
             actionRef.action.performed -= callback;

@@ -1,4 +1,5 @@
 using _Features.Abilities.Core.Scripts;
+using CustomInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,23 +8,32 @@ namespace _Features.Abilities.Hunter
     public class IceWall : AbilityBase
     {
         [Header("Segment Settings")]
+        [Tooltip("Wall segment prefab with IceWallSegment component"), ForceFill]
         public GameObject wallSegmentPrefab;
+        [Tooltip("Transparent ghost preview prefab for placement"), ForceFill]
         public GameObject wallGhostSegmentPrefab;
 
-        [Range(1, 8)] public int segmentCount = 4;
+        [Range(1, 8), Tooltip("Number of segments in the wall")]
+        public int segmentCount = 4;
+        [Range(0f, 1f), Tooltip("Gap between segments in units")]
         public float segmentGap = 0.05f;
 
         [Header("Placement")]
+        [Range(1f, 50f), Tooltip("Maximum placement distance from character")]
         public float maxPlaceDistance = 10f;
+        [Range(0f, 5f), Tooltip("Vertical offset above ground hit point")]
         public float wallHeightOffset = 1f;
 
         [Header("Rotation")]
+        [Range(5f, 45f), Tooltip("Degrees per scroll tick during placement")]
         public float rotationStep = 15f;
 
         [Header("Layer Mask")]
+        [Tooltip("Layers considered valid ground for wall placement")]
         public LayerMask groundLayer;
 
         [Header("UI (Optional)")]
+        [Tooltip("Radial fill image showing cooldown progress")]
         public UnityEngine.UI.Image cooldownRadialUI;
 
         private bool _isPlacing;

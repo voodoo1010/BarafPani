@@ -1,13 +1,14 @@
 using _Features.Player._Features.Walk.Config.Scripts;
 using _Features.Player.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Player._Features.Walk.Scripts
 {
     public class CharacterWalk : CharacterFeature, IMovementDataProvider
     {
-        [SerializeField] private CharacterWalkSettings characterWalkSettings;
-        //TODO: put this data shit in scriptableojects
+        [SerializeField, ForceFill, Tooltip("ScriptableObject with walk speed configuration")]
+        private CharacterWalkSettings characterWalkSettings;
         public float SpeedMultiplier { get; set; } = 1f;
         public float CrouchSpeedMultiplier { get; set; } = 1f;
 

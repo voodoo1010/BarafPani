@@ -1,3 +1,4 @@
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Abilities.Core.Scripts
@@ -5,9 +6,10 @@ namespace _Features.Abilities.Core.Scripts
     [RequireComponent(typeof(Collider))]
     public class AbilityPickup : MonoBehaviour
     {
-        [SerializeField] private AbilityData abilityData;
-        [Tooltip("Destroys the pickup GameObject on a successful grant. If false, caller can handle despawn externally.")]
-        [SerializeField] private bool destroyOnPickup = true;
+        [SerializeField, ForceFill, Tooltip("Ability data granted on pickup")]
+        private AbilityData abilityData;
+        [SerializeField, Tooltip("Destroys the pickup GameObject on a successful grant. If false, caller can handle despawn externally.")]
+        private bool destroyOnPickup = true;
 
         private void Reset()
         {

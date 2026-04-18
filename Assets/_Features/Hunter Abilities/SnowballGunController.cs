@@ -1,4 +1,5 @@
 using _Features.Abilities.Core.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Abilities.Hunter
@@ -6,19 +7,22 @@ namespace _Features.Abilities.Hunter
     public class SnowballGunController : AbilityBase
     {
         [Header("References")]
-        [SerializeField] private Transform _muzzlePoint;
-        [SerializeField] private SnowballProjectile _snowballPrefab;
+        [SerializeField, ForceFill, Tooltip("Transform at the barrel tip where snowballs spawn")]
+        private Transform _muzzlePoint;
+        [SerializeField, ForceFill, Tooltip("Snowball projectile prefab")]
+        private SnowballProjectile _snowballPrefab;
 
         [Header("Fire Settings")]
-        [Tooltip("Shots per second while held (intra-ability rate limiter).")]
-        [SerializeField] private float _fireRate = 2f;
-
-        [SerializeField] private float _snowballSpeed = 20f;
-        [SerializeField] private float _gravityScale = 9.8f;
+        [SerializeField, Tooltip("Shots per second (intra-ability rate limiter)"), Range(0.1f, 10f)]
+        private float _fireRate = 2f;
+        [SerializeField, Tooltip("Initial projectile speed in units/s"), Range(5f, 50f)]
+        private float _snowballSpeed = 20f;
+        [SerializeField, Tooltip("Gravity acceleration applied to projectile arc"), Range(0.1f, 50f)]
+        private float _gravityScale = 9.8f;
 
         [Header("Ammo Settings")]
-        [Tooltip("Shots per activation before the ammo is exhausted and the cooldown (from AbilityData) starts.")]
-        [SerializeField] private int _maxAmmo = 10;
+        [SerializeField, Tooltip("Shots per activation before cooldown starts"), Range(1, 100)]
+        private int _maxAmmo = 10;
 
         private float _fireCooldownTimer;
         private int _currentAmmo;

@@ -22,14 +22,14 @@ public class IceWallSegment : MonoBehaviour
     // -----------------------------------------------------------------------
 
     [Header("Health")]
-    [Tooltip("Maximum health of this segment.")]
+    [Tooltip("Maximum health of this segment."), Range(10f, 500f)]
     public float maxHealth = 100f;
 
     [Header("Deterioration (Self-Decay)")]
-    [Tooltip("Health lost per second naturally over time.")]
+    [Tooltip("Health lost per second naturally over time."), Range(0f, 20f)]
     public float deteriorationPerSecond = 2f;
 
-    [Tooltip("Delay in seconds before natural decay starts after placement.")]
+    [Tooltip("Delay in seconds before natural decay starts after placement."), Range(0f, 10f)]
     public float deteriorationDelay = 3f;
 
     [Header("Visual Damage States")]

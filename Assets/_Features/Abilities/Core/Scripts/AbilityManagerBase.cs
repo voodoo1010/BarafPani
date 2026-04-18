@@ -1,14 +1,20 @@
 using System;
 using _Features.Player.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Abilities.Core.Scripts
 {
     public abstract class AbilityManagerBase : CharacterFeature
     {
-        [SerializeField] protected Transform abilityParent;
-        [SerializeField] private Transform abilityOrigin;
-        [SerializeField] private Camera abilityCamera;
+        [HorizontalLine("Ability References", 1, FixedColor.Cyan)]
+        [MessageBox("Ability Parent defaults to this transform if left empty.", MessageBoxType.Info)]
+        [SerializeField, Tooltip("Parent transform for instantiated ability prefabs")]
+        protected Transform abilityParent;
+        [SerializeField, ForceFill, Tooltip("World-space origin point for ability projectiles and raycasts")]
+        private Transform abilityOrigin;
+
+        private Camera abilityCamera;
 
         protected AbilityBase[] Slots;
 
@@ -24,6 +30,7 @@ namespace _Features.Abilities.Core.Scripts
         protected override void Awake()
         {
             base.Awake();
+            abilityCamera = Camera.main;
             Slots = new AbilityBase[GetSlotCount()];
             if (abilityParent == null) abilityParent = transform;
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Abilities.Core.Scripts
@@ -6,9 +7,17 @@ namespace _Features.Abilities.Core.Scripts
     [CreateAssetMenu(fileName = "AbilityPool", menuName = "BarafPani/Abilities/Ability Pool")]
     public class AbilityPool : ScriptableObject
     {
-        [SerializeField] private List<AbilityData> hunterPool = new();
-        [SerializeField] private List<AbilityData> runnerPool = new();
-        [SerializeField] private bool uniqueRoll = true;
+        [HorizontalLine("Hunter", 1, FixedColor.Red)]
+        [SerializeField, Tooltip("Abilities available in the hunter random loadout")]
+        private List<AbilityData> hunterPool = new();
+
+        [HorizontalLine("Runner", 1, FixedColor.Green)]
+        [SerializeField, Tooltip("Abilities available as runner world pickups")]
+        private List<AbilityData> runnerPool = new();
+
+        [HorizontalLine("Settings", 1, FixedColor.Cyan)]
+        [SerializeField, Tooltip("If true, each roll picks unique abilities with no duplicates")]
+        private bool uniqueRoll = true;
 
         public IReadOnlyList<AbilityData> HunterPool => hunterPool;
         public IReadOnlyList<AbilityData> RunnerPool => runnerPool;

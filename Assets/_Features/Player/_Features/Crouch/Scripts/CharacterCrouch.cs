@@ -1,13 +1,15 @@
 using _Features.Player._Features.Crouch.Config.Scripts;
 using _Features.Player._Features.Walk.Scripts;
 using _Features.Player.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Player._Features.Crouch.Scripts
 {
     public class CharacterCrouch : CharacterFeature
     {
-        [SerializeField] private CharacterCrouchSettings crouchSettings;
+        [SerializeField, ForceFill, Tooltip("ScriptableObject with crouch height and speed settings")]
+        private CharacterCrouchSettings crouchSettings;
         private bool IsCrouching { get; set; }
 
         private float _defaultHeight;

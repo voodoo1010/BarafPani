@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 25597219968721590}
   - component: {fileID: 6249549727973832908}
   - component: {fileID: 2318210558945734858}
+  - component: {fileID: 6858173167956095495}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -236,6 +237,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Hunter.Scripts.HunterAnimationHandler
   blendSmoothing: 10
+--- !u!114 &6858173167956095495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797453955155720204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd857fd44f337284884766bd7608c4c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Hunter.Scripts.HunterAttackAnimationHandler
 --- !u!1 &825460333338108282
 GameObject:
   m_ObjectHideFlags: 0
@@ -3192,7 +3205,6 @@ GameObject:
   - component: {fileID: 2085642883902926064}
   - component: {fileID: 5827182343140277596}
   - component: {fileID: 3865241300867043155}
-  - component: {fileID: 6331501940541924290}
   - component: {fileID: 3450564323608523305}
   - component: {fileID: 5990594160291989676}
   - component: {fileID: 2641132854892872536}
@@ -3200,6 +3212,7 @@ GameObject:
   - component: {fileID: 5933510809653711024}
   - component: {fileID: 769109406483390934}
   - component: {fileID: 2472331838444793101}
+  - component: {fileID: 2060535931120672843}
   m_Layer: 0
   m_Name: CharacterFirstPerson
   m_TagString: Untagged
@@ -3223,6 +3236,7 @@ Transform:
   - {fileID: 3799011006865307001}
   - {fileID: 5404932393783783063}
   - {fileID: 25597219968721590}
+  - {fileID: 4125162202213207688}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &5827182343140277596
@@ -3265,24 +3279,6 @@ MonoBehaviour:
   characterControllerUnityComponent: {fileID: 5827182343140277596}
   characterSettings: {fileID: 11400000, guid: 2c0bac2bc295a1c49b6635e4c87b88a5, type: 2}
   groundCheckTransform: {fileID: 3799011006865307001}
---- !u!114 &6331501940541924290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8923762327679711103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f557a7100ab442489abbf2545f84935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterInput
-  moveAction: {fileID: -3977828962232948354, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
-  lookAction: {fileID: -1429493941395862347, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
-  sprintAction: {fileID: -3780055258321925678, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
-  crouchAction: {fileID: -52406771435755894, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
-  grabAction: {fileID: 0}
-  jumpAction: {fileID: 6601366802577399749, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
 --- !u!114 &3450564323608523305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3360,7 +3356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView._Features.FirstPerson.Scripts.CharacterFirstPersonCamera
   cameraViewSettings: {fileID: 11400000, guid: 7c1d9273b2a944044addf6c00e5c75fd, type: 2}
-  cinemachineCamera: {fileID: 0}
+  cinemachineCamera: {fileID: 9076083142216182323}
   firstPersonSettings: {fileID: 11400000, guid: 4e724e3d27e2c9447aada8b3274891ed, type: 2}
 --- !u!114 &2472331838444793101
 MonoBehaviour:
@@ -3376,10 +3372,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Core.Scripts.HunterAbilityManager
   abilityParent: {fileID: 2085642883902926064}
   abilityOrigin: {fileID: 5404932393783783063}
-  abilityCamera: {fileID: 0}
   pool: {fileID: 11400000, guid: a920828ee9c62344fb83792125b4b2fc, type: 2}
   rollOnAwake: 1
   rollSeed: -1
+--- !u!114 &2060535931120672843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce6769b0cc6488743a9c71cc03abd86f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Hunter.Scripts.HunterCharacterInput
+  moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  lookAction: {fileID: -1429493941395862347, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  sprintAction: {fileID: -3780055258321925678, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  crouchAction: {fileID: -52406771435755894, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  grabAction: {fileID: 0}
+  jumpAction: {fileID: 6601366802577399749, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  attackAction: {fileID: -2655994690423071068, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   ability1Action: {fileID: -1177821007492800487, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   ability2Action: {fileID: 6852644961083374836, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
 --- !u!1 &9168486005419861272
@@ -3413,3 +3427,80 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6053550594176729023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2048161423123400587
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2085642883902926064}
+    m_Modifications:
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6642588177195560829, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: m_Name
+      value: FirstPersonCM
+      objectReference: {fileID: 0}
+    - target: {fileID: 7032439476015672760, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+      propertyPath: Target.TrackingTarget
+      value: 
+      objectReference: {fileID: 2085642883902926064}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+--- !u!4 &4125162202213207688 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+  m_PrefabInstance: {fileID: 2048161423123400587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9076083142216182323 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7032439476015672760, guid: e12ab6468a147c44f935f6499a424551, type: 3}
+  m_PrefabInstance: {fileID: 2048161423123400587}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera

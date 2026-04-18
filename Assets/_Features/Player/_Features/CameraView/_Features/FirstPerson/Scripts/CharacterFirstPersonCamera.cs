@@ -1,5 +1,6 @@
 using _Features.Player._Features.CameraView._Features.FirstPerson.Config.Scripts;
 using _Features.Player._Features.CameraView.Scripts;
+using CustomInspector;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -7,7 +8,8 @@ namespace _Features.Player._Features.CameraView._Features.FirstPerson.Scripts
 {
     public class CharacterFirstPersonCamera : CharacterCameraView
     {
-        [SerializeField] private CharacterFirstPersonCameraSettings firstPersonSettings;
+        [SerializeField, ForceFill, Tooltip("ScriptableObject with pitch clamp and eye height settings")]
+        private CharacterFirstPersonCameraSettings firstPersonSettings;
 
         private CinemachinePanTilt _panTilt;
 

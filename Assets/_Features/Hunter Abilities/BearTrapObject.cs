@@ -7,13 +7,13 @@ public class BearTrapObject : MonoBehaviour
     // -----------------------------------------------------------------------
 
     [Header("Trap Behaviour")]
-    [Tooltip("How long the trap holds the victim before releasing and destroying itself.")]
+    [Tooltip("How long the trap holds the victim before releasing and destroying itself."), Range(0.5f, 10f)]
     public float TrapDuration = 3f;
 
-    [Tooltip("Damage dealt to the victim the instant the trap fires.")]
+    [Tooltip("Damage dealt to the victim the instant the trap fires."), Range(0f, 100f)]
     public float SnapDamage = 25f;
 
-    [Tooltip("Damage per second while the victim is held. Hooks into ITrappable if available.")]
+    [Tooltip("Damage per second while the victim is held. Hooks into ITrappable if available."), Range(0f, 20f)]
     public float DotDamagePerSecond = 5f;
 
     [Header("Visual States")]

@@ -1,14 +1,15 @@
 using _Features.Player._Features.Jump.Config.Scripts;
 using _Features.Player.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Player._Features.Jump.Scripts
 {
     public class CharacterJump : CharacterFeature
     {
-        [SerializeField] private CharacterJumpSettings characterJumpSettings;
+        [SerializeField, ForceFill, Tooltip("ScriptableObject with jump height and gravity settings")]
+        private CharacterJumpSettings characterJumpSettings;
         private float _verticalVelocity;
-        //TODO: put this data shit in scriptableojects
 
         private void OnEnable()
         {

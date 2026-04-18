@@ -1,4 +1,5 @@
 using _Features.Abilities.Core.Scripts;
+using CustomInspector;
 using UnityEngine;
 
 namespace _Features.Abilities.Hunter
@@ -6,15 +7,20 @@ namespace _Features.Abilities.Hunter
     public class HookController : AbilityBase
     {
         [Header("Hook Settings")]
-        [SerializeField] private float _hookSpeed = 20f;
-        [SerializeField] private float _pullSpeed = 15f;
-        [SerializeField] private float _maxHookDistance = 30f;
+        [SerializeField, Tooltip("Speed of the hook projectile in units/s"), Range(5f, 50f)]
+        private float _hookSpeed = 20f;
+        [SerializeField, Tooltip("Speed at which caught target is pulled in"), Range(5f, 50f)]
+        private float _pullSpeed = 15f;
+        [SerializeField, Tooltip("Maximum travel distance before the hook retracts"), Range(10f, 100f)]
+        private float _maxHookDistance = 30f;
 
         [Header("Layer")]
-        [SerializeField] private LayerMask _runnerLayer;
+        [SerializeField, Tooltip("Layers that the hook can latch onto")]
+        private LayerMask _runnerLayer;
 
         [Header("Prefabs")]
-        [SerializeField] private HookProjectile _hookPrefab;
+        [SerializeField, ForceFill, Tooltip("Hook projectile prefab with HookProjectile component")]
+        private HookProjectile _hookPrefab;
 
         private Transform _hookOrigin;
         private Camera _fpsCamera;

@@ -7,11 +7,16 @@ namespace _Features.Player.Scripts
 {
     public class Character : MonoBehaviour
     {
-        [SerializeField] private CharacterController characterControllerUnityComponent;
-        [SerializeField] private CharacterSettings characterSettings;
-        [HorizontalLine("Ground Check Specific", 1, FixedColor.Black)]
+        [HorizontalLine("References", 1, FixedColor.Cyan)]
+        [SerializeField, SelfFill, ForceFill, Tooltip("Unity's built-in CharacterController on this GameObject")]
+        private CharacterController characterControllerUnityComponent;
+        [SerializeField, ForceFill, Tooltip("ScriptableObject holding ground check configuration")]
+        private CharacterSettings characterSettings;
+
+        [HorizontalLine("Ground Check", 1, FixedColor.Black)]
         [MessageBox("Kept this here so the position is taken from a child within the GameObject, keeps positions local.", MessageBoxType.Info)]
-        [SerializeField] private Transform groundCheckTransform;
+        [SerializeField, ForceFill, Tooltip("Child transform used as the origin for ground sphere checks")]
+        private Transform groundCheckTransform;
 
         public CharacterController CharacterControllerUnityComponent => characterControllerUnityComponent;
 

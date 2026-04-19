@@ -12,27 +12,28 @@ namespace _Features.Player._Features.CameraView._Features.FirstPerson.Scripts
         private CharacterFirstPersonCameraSettings firstPersonSettings;
 
         private CinemachinePanTilt _panTilt;
-
+        private Transform _eyePivot;
         protected override void Awake()
         {
             base.Awake();
 
-            var eyePivot = new GameObject("[EyePivot]").transform;
-            eyePivot.SetParent(Character.transform);
-            eyePivot.localPosition = firstPersonSettings.EyeHeight; // full Vector3, set by you
-            eyePivot.localRotation = Quaternion.identity;
+            _eyePivot = new GameObject("[EyePivot]").transform;
+            _eyePivot.SetParent(Character.transform);
+            _eyePivot.localPosition = firstPersonSettings.EyeHeight;
+            _eyePivot.localRotation = Quaternion.identity;
 
-            CinemachineCamera.Follow = eyePivot;
+            CinemachineCamera.Follow = _eyePivot;
 
             var follow = CinemachineCamera.GetComponent<CinemachineFollow>();
             if (follow != null)
-                DestroyImmediate(follow); // immediate so AddComponent below doesn't conflict
+                DestroyImmediate(follow);
 
             CinemachineCamera.gameObject.AddComponent<CinemachineHardLockToTarget>();
 
             _panTilt = CinemachineCamera.GetComponent<CinemachinePanTilt>();
             _panTilt.ReferenceFrame = CinemachinePanTilt.ReferenceFrames.World;
         }
+
         protected override void ApplyLook(float yaw, float pitch)
         {
             _panTilt.PanAxis.Value += yaw;
@@ -42,8 +43,19 @@ namespace _Features.Player._Features.CameraView._Features.FirstPerson.Scripts
                 firstPersonSettings.PitchClampMax
             );
 
-            // Body rotates yaw-only; camera pitch is handled entirely by PanTilt
             Character.transform.rotation = Quaternion.Euler(0f, _panTilt.PanAxis.Value, 0f);
+
+            ApplyLookDownOffset();
+        }
+
+        private void ApplyLookDownOffset()
+        {
+            // Remove the minus sign — TiltAxis is positive when looking down in your setup
+            float lookDownAngle = Mathf.Clamp(_panTilt.TiltAxis.Value, 0f, 90f);
+            float strength = firstPersonSettings.LookDownOffsetCurve.Evaluate(lookDownAngle);
+
+            _eyePivot.localPosition = firstPersonSettings.EyeHeight
+                + firstPersonSettings.LookDownOffset * strength;
         }
     }
 }

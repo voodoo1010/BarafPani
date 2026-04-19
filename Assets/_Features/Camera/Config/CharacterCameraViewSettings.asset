@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CharacterCameraViewSettings
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView.Config.Scripts.CharacterCameraViewSettings
   HorizontalSensitivity: 0.1
-  VerticalSensitivity: 0.1
+  VerticalSensitivity: 0.392

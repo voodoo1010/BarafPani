@@ -20,7 +20,7 @@ namespace _Features.Player._Features.CameraView._Features.FirstPerson.Scripts
             CinemachineCamera.Follow = Character.transform;
 
             var follow = CinemachineCamera.GetComponent<CinemachineFollow>();
-            follow.FollowOffset = new Vector3(0f, firstPersonSettings.EyeHeight, 0f);
+            follow.FollowOffset = firstPersonSettings.EyeHeight;
 
             _panTilt = CinemachineCamera.GetComponent<CinemachinePanTilt>();
             _panTilt.ReferenceFrame = CinemachinePanTilt.ReferenceFrames.World;

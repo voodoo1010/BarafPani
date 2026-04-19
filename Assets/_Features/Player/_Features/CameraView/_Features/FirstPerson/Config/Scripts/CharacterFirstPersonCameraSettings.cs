@@ -9,7 +9,7 @@ namespace _Features.Player._Features.CameraView._Features.FirstPerson.Config.Scr
         public float PitchClampMin = -80f;
         [Tooltip("Maximum pitch angle (looking up)"), Range(0f, 90f)]
         public float PitchClampMax = 80f;
-        [Tooltip("Camera height from character origin in units"), Range(0.5f, 2.5f)]
-        public float EyeHeight = 1.6f;
+        [Tooltip("Camera height from character origin in units")]
+        public Vector3 EyeHeight;
     }
 }

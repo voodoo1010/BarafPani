@@ -1,3 +1,4 @@
+using System;
 using _Features.Player._Features.Jump.Config.Scripts;
 using _Features.Player.Scripts;
 using CustomInspector;
@@ -9,7 +10,13 @@ namespace _Features.Player._Features.Jump.Scripts
     {
         [SerializeField, ForceFill, Tooltip("ScriptableObject with jump height and gravity settings")]
         private CharacterJumpSettings characterJumpSettings;
+
         private float _verticalVelocity;
+
+        public event Action JumpStarted;
+
+        public bool IsAscending => !Character.IsGrounded && _verticalVelocity > 0f;
+        public bool IsFalling => !Character.IsGrounded && _verticalVelocity <= 0f;
 
         private void OnEnable()
         {
@@ -37,6 +44,7 @@ namespace _Features.Player._Features.Jump.Scripts
             if (!Character.IsGrounded) return;
 
             _verticalVelocity = Mathf.Sqrt(-2f * characterJumpSettings.Gravity * characterJumpSettings.JumpHeight);
+            JumpStarted?.Invoke();
         }
     }
 }

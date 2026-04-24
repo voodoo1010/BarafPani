@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace _Features.Player._Features.Crouch.Scripts
 {
-    public class CharacterCrouch : CharacterFeature
+    public class CharacterCrouch : CharacterFeature, ICrouchDataProvider
     {
         [SerializeField, ForceFill, Tooltip("ScriptableObject with crouch height and speed settings")]
         private CharacterCrouchSettings crouchSettings;
-        private bool IsCrouching { get; set; }
+        public bool IsCrouching { get; private set; }
 
         private float _defaultHeight;
         private CharacterWalk _characterWalk;

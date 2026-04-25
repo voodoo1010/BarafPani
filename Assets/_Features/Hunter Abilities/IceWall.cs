@@ -1,4 +1,4 @@
-using _Features.Abilities.Core.Scripts;
+﻿using _Features.Abilities.Core.Scripts;
 using CustomInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,74 +8,68 @@ namespace _Features.Abilities.Hunter
     public class IceWall : AbilityBase
     {
         [Header("Segment Settings")]
-        [Tooltip("Wall segment prefab with IceWallSegment component"), ForceFill]
+        [Tooltip("Wall segment prefab (real, with collider/HP)"), ForceFill]
         public GameObject wallSegmentPrefab;
-        [Tooltip("Transparent ghost preview prefab for placement"), ForceFill]
+        [Tooltip("Transparent ghost preview prefab"), ForceFill]
         public GameObject wallGhostSegmentPrefab;
 
-        [Range(1, 8), Tooltip("Number of segments in the wall")]
-        public int segmentCount = 4;
-        [Range(0f, 1f), Tooltip("Gap between segments in units")]
-        public float segmentGap = 0.05f;
+        [Range(1, 8)] public int segmentCount = 4;
+        [Range(0f, 2f)] public float segmentWidth = 1f;
+        [Range(0f, 1f)] public float segmentGap = 0.05f;
 
-        [Header("Placement")]
-        [Range(1f, 50f), Tooltip("Maximum placement distance from character")]
-        public float maxPlaceDistance = 10f;
-        [Range(0f, 5f), Tooltip("Vertical offset above ground hit point")]
-        public float wallHeightOffset = 1f;
+        [Header("Aim & Distance")]
+        [Range(1f, 5f), Tooltip("Minimum placement distance (when looking down)")]
+        public float minDistance = 2f;
+
+        [Range(5f, 30f), Tooltip("Maximum placement distance (when looking forward)")]
+        public float maxDistance = 12f;
+
+        [Range(0f, 5f), Tooltip("Vertical offset above ground")]
+        public float heightOffset = 1f;
 
         [Header("Rotation")]
-        [Range(5f, 45f), Tooltip("Degrees per scroll tick during placement")]
+        [Range(5f, 45f), Tooltip("Degrees per scroll tick")]
         public float rotationStep = 15f;
 
         [Header("Layer Mask")]
-        [Tooltip("Layers considered valid ground for wall placement")]
-        public LayerMask groundLayer;
+        [Tooltip("Layers considered valid ground")]
+        public LayerMask groundLayer = ~0;  // Default to "Everything"
+
+        [Header("Validation")]
+        [Tooltip("Color when placement is valid")]
+        public Color validColor = new(0.2f, 0.85f, 1f, 0.45f);
+        [Tooltip("Color when placement is invalid")]
+        public Color invalidColor = new(1f, 0.2f, 0.2f, 0.45f);
 
         [Header("UI (Optional)")]
-        [Tooltip("Radial fill image showing cooldown progress")]
         public UnityEngine.UI.Image cooldownRadialUI;
 
-        private bool _isPlacing;
-        private float _currentRotation;
-        private Camera _cam;
+        private bool _isPreviewing;
+        private float _yawOffset;          // Scroll wheel rotation
         private GameObject[] _ghostSegments;
+        private Camera _cam;
 
-        private static readonly Color ColourValid = new(0.2f, 0.85f, 1f, 0.45f);
-        private static readonly Color ColourInvalid = new(1f, 0.2f, 0.2f, 0.45f);
-
-        private InputAction _placeAction;
-        private InputAction _cancelAction;
         private InputAction _scrollAction;
 
         protected override void OnAcquiredInternal()
         {
             _cam = Camera.main;
+            if (_cam == null)
+                Debug.LogError("[IceWall] No Main Camera found! Tag your camera as MainCamera.");
 
-            _placeAction = new InputAction("Place", binding: "<Mouse>/leftButton");
-            _placeAction.performed += _ => HandlePlace();
-
-            _cancelAction = new InputAction("Cancel", binding: "<Mouse>/rightButton");
-            _cancelAction.performed += _ => { if (_isPlacing) CancelPlacement(); };
-
-            _scrollAction = new InputAction("Scroll", binding: "<Mouse>/scroll/y");
-
-            _placeAction.Enable();
-            _cancelAction.Enable();
+            _scrollAction = new InputAction("WallScroll", binding: "<Mouse>/scroll/y");
             _scrollAction.Enable();
 
-            if (wallSegmentPrefab == null) Debug.LogError("[IceWall] wallSegmentPrefab not assigned.");
-            if (wallGhostSegmentPrefab == null) Debug.LogError("[IceWall] wallGhostSegmentPrefab not assigned.");
+            if (wallSegmentPrefab == null)
+                Debug.LogError("[IceWall] wallSegmentPrefab not assigned!");
+            if (wallGhostSegmentPrefab == null)
+                Debug.LogError("[IceWall] wallGhostSegmentPrefab not assigned!");
         }
 
         protected override void OnReleasedInternal()
         {
-            if (_isPlacing) CancelPlacement();
-            _placeAction?.Dispose();
-            _cancelAction?.Dispose();
+            CancelPreview();
             _scrollAction?.Dispose();
-            _placeAction = null;
-            _cancelAction = null;
             _scrollAction = null;
         }
 
@@ -86,65 +80,171 @@ namespace _Features.Abilities.Hunter
             if (cooldownRadialUI != null)
                 cooldownRadialUI.fillAmount = CooldownNormalized;
 
-            if (_isPlacing)
+            if (_isPreviewing)
             {
-                HandleRotationInput();
-                UpdateGhostVisualizer();
+                HandleScrollRotation();
+                UpdateGhostPositions();
             }
         }
 
         protected override bool OnActivateInternal()
         {
-            if (_isPlacing) CancelPlacement();
-            else EnterPlacementMode();
+            if (!_isPreviewing)
+                StartPreview();
+            else
+                ConfirmPlacement();
+
             return true;
         }
 
-        private void EnterPlacementMode()
+        // ───────────────────────────────────────────────────────────
+        // Preview Lifecycle
+        // ───────────────────────────────────────────────────────────
+
+        private void StartPreview()
         {
-            _isPlacing = true;
-            _currentRotation = 0f;
+            if (wallGhostSegmentPrefab == null) return;
+
+            _isPreviewing = true;
+            _yawOffset = 0f;
 
             _ghostSegments = new GameObject[segmentCount];
             for (int i = 0; i < segmentCount; i++)
             {
-                if (wallGhostSegmentPrefab == null) continue;
                 _ghostSegments[i] = Instantiate(wallGhostSegmentPrefab);
                 _ghostSegments[i].name = $"IceWallGhost_{i}";
             }
+
+            UpdateGhostPositions();
         }
 
-        private void CancelPlacement()
+        private void CancelPreview()
         {
-            _isPlacing = false;
-            DestroyAllGhosts();
+            _isPreviewing = false;
+            DestroyGhosts();
         }
 
-        private void HandleRotationInput()
+        private void ConfirmPlacement()
         {
+            if (wallSegmentPrefab == null) return;
+            if (!TryGetPlacement(out Vector3 center, out Quaternion rotation, out bool isValid)) return;
+            if (!isValid)
+            {
+                Debug.Log("[IceWall] Invalid placement.");
+                return;
+            }
+
+            Vector3[] positions = CalculateSegmentPositions(center, rotation);
+            for (int i = 0; i < segmentCount; i++)
+            {
+                GameObject seg = Instantiate(wallSegmentPrefab, positions[i], rotation);
+                seg.name = $"IceWallSegment_{i}";
+            }
+
+            CancelPreview();
+            ConsumeActivation();
+        }
+
+        // ───────────────────────────────────────────────────────────
+        // Input
+        // ───────────────────────────────────────────────────────────
+
+        private void HandleScrollRotation()
+        {
+            if (_scrollAction == null) return;
+
             float scroll = _scrollAction.ReadValue<float>();
             if (Mathf.Abs(scroll) <= 0.01f) return;
 
-            _currentRotation += scroll > 0 ? rotationStep : -rotationStep;
-            _currentRotation = Mathf.Repeat(_currentRotation, 360f);
+            _yawOffset += scroll > 0 ? rotationStep : -rotationStep;
+            _yawOffset = Mathf.Repeat(_yawOffset, 360f);
         }
 
-        private void UpdateGhostVisualizer()
+        // ───────────────────────────────────────────────────────────
+        // Aim Calculation (Sage-style)
+        // ───────────────────────────────────────────────────────────
+
+        private bool TryGetPlacement(out Vector3 center, out Quaternion rotation, out bool isValid)
+        {
+            center = Vector3.zero;
+            rotation = Quaternion.identity;
+            isValid = false;
+
+            if (_cam == null) return false;
+
+            // Cast ray FROM camera through screen center (third-person crosshair)
+            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+            Vector3 aimPoint;
+
+            // Try to hit ground directly with ray
+            if (Physics.Raycast(ray, out RaycastHit hit, maxDistance * 2f, groundLayer))
+            {
+                aimPoint = hit.point;
+            }
+            else
+            {
+                // No hit — project ray onto a horizontal plane at player's feet level
+                Plane groundPlane = new Plane(Vector3.up, transform.position);
+                if (groundPlane.Raycast(ray, out float dist))
+                    aimPoint = ray.GetPoint(dist);
+                else
+                    return false;
+            }
+
+            // Clamp distance from player
+            Vector3 toAim = aimPoint - transform.position;
+            toAim.y = 0f;
+            float distance = toAim.magnitude;
+            distance = Mathf.Clamp(distance, minDistance, maxDistance);
+
+            Vector3 horizontalDir = toAim.sqrMagnitude > 0.001f ? toAim.normalized : transform.forward;
+
+            // Final placement point
+            center = transform.position + horizontalDir * distance + Vector3.up * heightOffset;
+
+            // Wall rotation: face the player, plus scroll wheel offset
+            float baseYaw = Mathf.Atan2(horizontalDir.x, horizontalDir.z) * Mathf.Rad2Deg;
+            rotation = Quaternion.Euler(0f, baseYaw + _yawOffset, 0f);
+
+            // Valid if within max range
+            isValid = (aimPoint - transform.position).magnitude <= maxDistance * 1.05f;
+
+            return true;
+        }
+
+        private Vector3[] CalculateSegmentPositions(Vector3 center, Quaternion rotation)
+        {
+            Vector3 right = rotation * Vector3.right;
+            float totalWidth = (segmentWidth + segmentGap) * segmentCount - segmentGap;
+            float startOffset = -totalWidth * 0.5f + segmentWidth * 0.5f;
+
+            Vector3[] positions = new Vector3[segmentCount];
+            for (int i = 0; i < segmentCount; i++)
+            {
+                float offset = startOffset + i * (segmentWidth + segmentGap);
+                positions[i] = center + right * offset;
+            }
+            return positions;
+        }
+
+        // ───────────────────────────────────────────────────────────
+        // Ghost Update
+        // ───────────────────────────────────────────────────────────
+
+        private void UpdateGhostPositions()
         {
             if (_ghostSegments == null) return;
 
-            bool hitFound = GetPlacementData(out Vector3 centre, out bool isValid);
-
-            if (!hitFound)
+            if (!TryGetPlacement(out Vector3 center, out Quaternion rotation, out bool isValid))
             {
                 foreach (GameObject g in _ghostSegments)
                     if (g != null) g.SetActive(false);
                 return;
             }
 
-            Vector3[] positions = CalculateSegmentPositions(centre);
-            Quaternion rotation = Quaternion.Euler(0f, _currentRotation, 0f);
-            Color colour = isValid ? ColourValid : ColourInvalid;
+            Vector3[] positions = CalculateSegmentPositions(center, rotation);
+            Color color = isValid ? validColor : invalidColor;
 
             for (int i = 0; i < segmentCount; i++)
             {
@@ -152,82 +252,23 @@ namespace _Features.Abilities.Hunter
                 _ghostSegments[i].SetActive(true);
                 _ghostSegments[i].transform.position = positions[i];
                 _ghostSegments[i].transform.rotation = rotation;
-                SetGhostColour(_ghostSegments[i], colour);
+                SetGhostColor(_ghostSegments[i], color);
             }
         }
 
-        private void HandlePlace()
+        private void SetGhostColor(GameObject ghost, Color c)
         {
-            if (!_isPlacing) return;
-
-            bool hitFound = GetPlacementData(out Vector3 centre, out bool isValid);
-
-            if (hitFound && isValid) PlaceWall(centre);
-            else Debug.Log("[IceWall] Invalid placement.");
-        }
-
-        private void PlaceWall(Vector3 centre)
-        {
-            if (wallSegmentPrefab == null) return;
-
-            Vector3[] positions = CalculateSegmentPositions(centre);
-            Quaternion rotation = Quaternion.Euler(0f, _currentRotation, 0f);
-
-            for (int i = 0; i < segmentCount; i++)
+            foreach (Renderer r in ghost.GetComponentsInChildren<Renderer>())
             {
-                GameObject seg = Instantiate(wallSegmentPrefab, positions[i], rotation);
-                seg.name = $"IceWallSegment_{i}";
+                foreach (Material mat in r.materials)
+                {
+                    if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
+                    else if (mat.HasProperty("_Color")) mat.color = c;
+                }
             }
-
-            _isPlacing = false;
-            DestroyAllGhosts();
-            ConsumeActivation();
         }
 
-        private Vector3[] CalculateSegmentPositions(Vector3 centre)
-        {
-            float segmentWidth = GetSegmentWidth();
-            float totalWidth = (segmentWidth + segmentGap) * segmentCount - segmentGap;
-            float startX = -totalWidth * 0.5f + segmentWidth * 0.5f;
-
-            Vector3 right = Quaternion.Euler(0f, _currentRotation, 0f) * Vector3.right;
-            Vector3[] positions = new Vector3[segmentCount];
-
-            for (int i = 0; i < segmentCount; i++)
-            {
-                float offset = startX + i * (segmentWidth + segmentGap);
-                positions[i] = centre + right * offset;
-            }
-
-            return positions;
-        }
-
-        private float GetSegmentWidth()
-        {
-            if (wallSegmentPrefab == null) return 1f;
-            Renderer rend = wallSegmentPrefab.GetComponentInChildren<Renderer>();
-            if (rend != null && rend.bounds.size.x > 0.01f) return rend.bounds.size.x;
-            return wallSegmentPrefab.transform.localScale.x;
-        }
-
-        private bool GetPlacementData(out Vector3 worldPoint, out bool isValid)
-        {
-            worldPoint = Vector3.zero;
-            isValid = false;
-
-            if (_cam == null || Mouse.current == null) return false;
-
-            Ray ray = _cam.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-            if (!Physics.Raycast(ray, out RaycastHit hit, maxPlaceDistance * 2f, groundLayer))
-                return false;
-
-            worldPoint = hit.point + Vector3.up * wallHeightOffset;
-            isValid = Vector3.Distance(transform.position, hit.point) <= maxPlaceDistance;
-            return true;
-        }
-
-        private void DestroyAllGhosts()
+        private void DestroyGhosts()
         {
             if (_ghostSegments == null) return;
             foreach (GameObject g in _ghostSegments)
@@ -235,23 +276,21 @@ namespace _Features.Abilities.Hunter
             _ghostSegments = null;
         }
 
-        private void SetGhostColour(GameObject ghost, Color c)
+        private void OnDisable()
         {
-            if (ghost == null) return;
-            foreach (Renderer r in ghost.GetComponentsInChildren<Renderer>())
-            {
-                foreach (Material mat in r.materials)
-                {
-                    if (mat.HasProperty("_Color")) mat.color = c;
-                    if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", c);
-                }
-            }
+            DestroyGhosts();
         }
+
+        // ───────────────────────────────────────────────────────────
+        // Editor Gizmos
+        // ───────────────────────────────────────────────────────────
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = new Color(0f, 0.8f, 1f, 0.2f);
-            Gizmos.DrawWireSphere(transform.position, maxPlaceDistance);
+            Gizmos.color = new Color(0f, 0.8f, 1f, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, maxDistance);
+            Gizmos.color = new Color(1f, 0.4f, 0f, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, minDistance);
         }
     }
 }

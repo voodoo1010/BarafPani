@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.CameraView._Features.FirstPerson.Config.Scripts.CharacterFirstPersonCameraSettings
   PitchClampMin: -80
   PitchClampMax: 80
-  EyeHeight: {x: 0, y: 12.5, z: 2.5}
+  EyeHeight: {x: 0, y: 6, z: 1.5}
   LookDownOffset: {x: 0, y: 1, z: -0.25}
   LookDownOffsetCurve:
     serializedVersion: 2

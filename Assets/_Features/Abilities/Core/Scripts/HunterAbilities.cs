@@ -17,6 +17,7 @@ namespace _Features.Abilities.Core.Scripts
         private int rollSeed = -1;
 
         private HunterCharacterInput _hunterInput;
+        private int _armedSlot = -1;
 
         protected override int GetSlotCount() => HunterSlotCount;
 
@@ -30,16 +31,38 @@ namespace _Features.Abilities.Core.Scripts
         private void OnEnable()
         {
             _hunterInput.OnAbilityInput += HandleAbilityInput;
+            _hunterInput.OnAbilityAttackInput += HandleAbilityAttack;
         }
 
         private void OnDisable()
         {
             _hunterInput.OnAbilityInput -= HandleAbilityInput;
+            _hunterInput.OnAbilityAttackInput -= HandleAbilityAttack;
         }
 
         private void HandleAbilityInput(int slot)
         {
-            Activate(slot);
+            // If same slot pressed again, cancel it
+            if (_armedSlot == slot)
+            {
+                CancelSlot(_armedSlot);
+                _armedSlot = -1;
+                return;
+            }
+
+            // Block new ability if one is already armed
+            if (_armedSlot >= 0) return;
+
+            if (Activate(slot))
+                _armedSlot = slot;
+        }
+
+        private void HandleAbilityAttack()
+        {
+            if (_armedSlot < 0) return;
+
+            if (AbilityAttack(_armedSlot))
+                _armedSlot = -1;
         }
 
         [ContextMenu("Roll Loadout")]
@@ -58,9 +81,7 @@ namespace _Features.Abilities.Core.Scripts
             var rng = seed < 0 ? new System.Random() : new System.Random(seed);
             var rolled = pool.RollHunter(SlotCount, rng);
             for (int i = 0; i < rolled.Count && i < SlotCount; i++)
-            {
                 TryGrant(rolled[i], i);
-            }
         }
     }
 }

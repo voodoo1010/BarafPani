@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3013e651dcbac843b5b1402fdb258bf, type: 3}
-  m_Name: Hook
+  m_Name: SnowGun
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Core.Scripts.AbilityData
-  abilityId: 0
+  abilityId: 3
   displayName: Hook
   icon: {fileID: 0}
   uiColor: {r: 0, g: 0.12064552, b: 1, a: 1}
-  abilityPrefab: {fileID: 7367766459597976259, guid: 9449de1a7605c0547b2c0065c3d7a7ea, type: 3}
-  cooldown: 4
-  maxCharges: 10
+  abilityPrefab: {fileID: -1254413315341283225, guid: 6972cf4f9b9dace4f8cacca26d11694e, type: 3}
+  cooldown: 5
+  maxCharges: 5
   consumeOnEmpty: 0
   hunterPool: 1
   runnerPool: 0

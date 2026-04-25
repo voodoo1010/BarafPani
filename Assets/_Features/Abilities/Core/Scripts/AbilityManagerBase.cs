@@ -15,7 +15,6 @@ namespace _Features.Abilities.Core.Scripts
         private Transform abilityOrigin;
 
         private Camera abilityCamera;
-
         protected AbilityBase[] Slots;
 
         public int SlotCount => Slots?.Length ?? 0;
@@ -78,6 +77,20 @@ namespace _Features.Abilities.Core.Scripts
 
             OnAbilityActivated?.Invoke(slot, ability);
             return true;
+        }
+
+        public bool AbilityAttack(int slot)
+        {
+            if (slot < 0 || slot >= SlotCount) return false;
+            var ability = Slots[slot];
+            if (ability == null) return false;
+            return ability.TryAbilityAttack();
+        }
+
+        public void CancelSlot(int slot)
+        {
+            if (slot < 0 || slot >= SlotCount) return;
+            Slots[slot]?.Cancel();
         }
 
         private void HandleAbilityConsumed(AbilityBase ability)

@@ -7,7 +7,6 @@ namespace _Features.Abilities.Hunter
     public class SnowballGunController : AbilityBase
     {
         [Header("References")]
-        [SerializeField, ForceFill, Tooltip("Transform at the barrel tip where snowballs spawn")]
         private Transform _muzzlePoint;
         [SerializeField, ForceFill, Tooltip("Snowball projectile prefab")]
         private SnowballProjectile _snowballPrefab;
@@ -26,11 +25,13 @@ namespace _Features.Abilities.Hunter
 
         private float _fireCooldownTimer;
         private int _currentAmmo;
-        private Camera _mainCamera;
+        private Camera _abilityCamera;
+        private bool _isArmed;
 
         protected override void OnAcquiredInternal()
         {
-            _mainCamera = Camera.main;
+            _muzzlePoint = Manager.AbilityOrigin;
+            _abilityCamera = Manager.AbilityCamera;
             _currentAmmo = _maxAmmo;
             _fireCooldownTimer = 0f;
         }
@@ -42,27 +43,55 @@ namespace _Features.Abilities.Hunter
             if (_fireCooldownTimer > 0f)
                 _fireCooldownTimer -= Time.deltaTime;
 
+            // Reload ammo once cooldown finishes
             if (CooldownRemaining <= 0f && _currentAmmo <= 0)
                 _currentAmmo = _maxAmmo;
         }
 
         protected override bool OnActivateInternal()
         {
+            if (_isArmed) return false;
+
+            _isArmed = true;
+
+            // TODO:  ready animation here
+
+            return true;
+        }
+
+        public override bool OnAbilityAttackInternal()
+        {
+            if (!_isArmed) return false;
             if (_fireCooldownTimer > 0f) return false;
             if (_currentAmmo <= 0) return false;
-            if (_muzzlePoint == null || _snowballPrefab == null || _mainCamera == null)
+            if (_muzzlePoint == null || _snowballPrefab == null || _abilityCamera == null)
             {
                 Debug.LogError("[SnowballGun] References not assigned.");
                 return false;
             }
 
             Fire();
-            return true;
+
+            // Return true (signal done) only when clip is empty so _armedSlot clears
+            if (_currentAmmo <= 0)
+            {
+                _isArmed = false;
+                return true;
+            }
+
+            return false;
+        }
+
+        public override void OnCancelInternal()
+        {
+            _isArmed = false;
+
+            // TODO: Play gun holster / cancel animation here
         }
 
         private void Fire()
         {
-            Ray ray = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Ray ray = _abilityCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit, 500f)
                 ? hit.point
                 : ray.GetPoint(500f);

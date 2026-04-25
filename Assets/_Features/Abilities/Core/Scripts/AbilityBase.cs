@@ -45,6 +45,13 @@ namespace _Features.Abilities.Core.Scripts
             return OnActivateInternal();
         }
 
+        public bool TryAbilityAttack() => OnAbilityAttackInternal();
+
+        public void Cancel()
+        {
+            OnCancelInternal();
+        }
+
         /// <summary>
         /// Subclasses call this when the ability actually fires — decrements a charge and starts cooldown.
         /// Instant abilities call it inside OnActivateInternal. Multi-step abilities (placement flows)
@@ -75,5 +82,9 @@ namespace _Features.Abilities.Core.Scripts
         /// actually commits (may be same frame or later).
         /// </summary>
         protected abstract bool OnActivateInternal();
+
+        // Subclasses that have a two-phase flow override these
+        public virtual bool OnAbilityAttackInternal() => false;
+        public virtual void OnCancelInternal() { }
     }
 }

@@ -15,9 +15,12 @@ namespace _Features.Hunter.Scripts
         private InputActionReference ability1Action;
         [SerializeField, Tooltip("Ability slot 2 input")]
         private InputActionReference ability2Action;
+        [SerializeField, Tooltip("Hunter ability attack input")]
+        private InputActionReference abilityAttackAction;
 
         public event Action OnAttackInput;
         public event Action<int> OnAbilityInput;
+        public event Action OnAbilityAttackInput;
 
         protected override void OnEnable()
         {
@@ -25,6 +28,7 @@ namespace _Features.Hunter.Scripts
             BindAction(attackAction, OnAttack, true);
             BindAction(ability1Action, OnAbility1, true);
             BindAction(ability2Action, OnAbility2, true);
+            BindAction(abilityAttackAction, OnAbilityAttack, true);
         }
 
         protected override void OnDisable()
@@ -33,6 +37,7 @@ namespace _Features.Hunter.Scripts
             BindAction(attackAction, OnAttack, false);
             BindAction(ability1Action, OnAbility1, false);
             BindAction(ability2Action, OnAbility2, false);
+            BindAction(abilityAttackAction, OnAbilityAttack, false);
         }
 
         private void BindAction(InputActionReference actionRef, Action<InputAction.CallbackContext> callback, bool bind)
@@ -53,5 +58,6 @@ namespace _Features.Hunter.Scripts
         private void OnAttack(InputAction.CallbackContext ctx) => OnAttackInput?.Invoke();
         private void OnAbility1(InputAction.CallbackContext ctx) => OnAbilityInput?.Invoke(0);
         private void OnAbility2(InputAction.CallbackContext ctx) => OnAbilityInput?.Invoke(1);
+        private void OnAbilityAttack(InputAction.CallbackContext ctx) => OnAbilityAttackInput?.Invoke();
     }
 }

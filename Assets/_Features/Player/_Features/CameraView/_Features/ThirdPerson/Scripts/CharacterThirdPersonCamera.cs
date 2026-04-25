@@ -7,39 +7,28 @@ namespace _Features.Player._Features.CameraView._Features.ThirdPerson.Scripts
 {
     public class CharacterThirdPersonCamera : CharacterCameraView
     {
-        [SerializeField, ForceFill, Tooltip("ScriptableObject with third-person pitch clamp settings")]
+        [SerializeField, ForceFill]
         private CharacterThirdPersonCameraSettings thirdPersonSettings;
 
-        private Transform _pivot;
-        private float _yaw;
-        private float _pitch;
-
-        protected override Transform MovementReferenceTransform => _pivot;
+        // Camera's transform is the movement reference (so WASD is camera-relative)
+        protected override Transform MovementReferenceTransform => CinemachineCamera.transform;
 
         protected override void Awake()
         {
             base.Awake();
 
-            _pivot = new GameObject("CameraPivot_ThirdPerson").transform;
-            _pivot.SetParent(Character.transform);
-            _pivot.localPosition = Vector3.zero;
-
-            CinemachineCamera.Follow = _pivot;
-            CinemachineCamera.LookAt = Character.transform;
+            // Ensure tracking target is set to the character (in case Inspector wasn't set)
+            if (CinemachineCamera.Follow == null)
+                CinemachineCamera.Follow = Character.transform;
+            if (CinemachineCamera.LookAt == null)
+                CinemachineCamera.LookAt = Character.transform;
         }
 
-        private void OnDestroy()
-        {
-            if (_pivot) Destroy(_pivot.gameObject);
-        }
-
+        // Cinemachine's InputAxisController handles input directly now —
+        // your CharacterInput's lookAction can stop firing into ApplyLook for third-person.
         protected override void ApplyLook(float yaw, float pitch)
         {
-            _yaw += yaw;
-            _pitch -= pitch;
-            _pitch = Mathf.Clamp(_pitch, thirdPersonSettings.PitchClampMin, thirdPersonSettings.PitchClampMax);
-
-            _pivot.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
+            // Intentionally empty — Cinemachine handles look input
         }
     }
 }

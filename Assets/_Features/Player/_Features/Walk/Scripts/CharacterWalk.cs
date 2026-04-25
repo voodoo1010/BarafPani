@@ -9,6 +9,10 @@ namespace _Features.Player._Features.Walk.Scripts
     {
         [SerializeField, ForceFill, Tooltip("ScriptableObject with walk speed configuration")]
         private CharacterWalkSettings characterWalkSettings;
+
+        [SerializeField, Tooltip("How fast the character rotates to face movement direction (degrees per second)")]
+        private float rotationSpeed = 720f;
+
         public float SpeedMultiplier { get; set; } = 1f;
         public float CrouchSpeedMultiplier { get; set; } = 1f;
 
@@ -28,12 +32,17 @@ namespace _Features.Player._Features.Walk.Scripts
             Character.OnMoveInput -= HandleMove;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (_moveInput == Vector2.zero) return;
 
             Vector3 direction = GetMoveDirection();
-            Character.CharacterControllerUnityComponent.Move(direction * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime));
+
+            Character.CharacterControllerUnityComponent.Move(
+                direction * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime)
+            );
+
+            RotateTowardsMovement(direction);
         }
 
         private Vector3 GetMoveDirection()
@@ -49,6 +58,18 @@ namespace _Features.Player._Features.Walk.Scripts
             right.Normalize();
 
             return forward * _moveInput.y + right * _moveInput.x;
+        }
+
+        private void RotateTowardsMovement(Vector3 direction)
+        {
+            if (direction.sqrMagnitude < 0.001f) return;
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+            Character.transform.rotation = Quaternion.RotateTowards(
+                Character.transform.rotation,
+                targetRotation,
+                rotationSpeed * Time.deltaTime
+            );
         }
 
         private void HandleMove(Vector2 input)

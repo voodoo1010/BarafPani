@@ -10,6 +10,9 @@ namespace _Features.Player._Features.Walk.Scripts
         [SerializeField, ForceFill, Tooltip("ScriptableObject with walk speed configuration")]
         private CharacterWalkSettings characterWalkSettings;
 
+        [SerializeField, Tooltip("Rotate the character to face movement direction. Enable for third-person, disable for first-person.")]
+        private bool rotateToMovementDirection = true;
+
         [SerializeField, Tooltip("How fast the character rotates to face movement direction (degrees per second)")]
         private float rotationSpeed = 720f;
 
@@ -42,7 +45,8 @@ namespace _Features.Player._Features.Walk.Scripts
                 direction * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime)
             );
 
-            RotateTowardsMovement(direction);
+            if (rotateToMovementDirection)
+                RotateTowardsMovement(direction);
         }
 
         private Vector3 GetMoveDirection()

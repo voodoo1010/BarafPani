@@ -193,8 +193,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5812986834745007305}
   - {fileID: 5225023457757313590}
@@ -3317,6 +3317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Walk.Scripts.CharacterWalk
   characterWalkSettings: {fileID: 11400000, guid: 5cf8929d24ba90040b6f0e42eef03608, type: 2}
+  rotateToMovementDirection: 0
+  rotationSpeed: 720
 --- !u!114 &1539806886013619017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3441,11 +3443,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.899992
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3477,7 +3479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4726653834656663497, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: FollowOffset.y
-      value: 12.9
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6642588177195560829, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_Name

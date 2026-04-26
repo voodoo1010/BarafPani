@@ -195,6 +195,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterFirstPerson
       objectReference: {fileID: 0}
+    - target: {fileID: 8923762327679711103, guid: eaacf673019416241bcf997f6df0dca2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -261,7 +265,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -287,8 +291,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099624546}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.14582, y: 6, z: 3.0536299}
+  m_LocalRotation: {x: 0.08718531, y: -0.000000016065204, z: 0.0000000014060036, w: 0.99619216}
+  m_LocalPosition: {x: 1.0025902, y: 2.4392064, z: -5.767884}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -424,7 +428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8923762327679711103, guid: 5a2263f683aa9064bb148660a6212228, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

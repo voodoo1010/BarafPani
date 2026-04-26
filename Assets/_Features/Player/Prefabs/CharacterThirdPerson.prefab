@@ -1640,6 +1640,7 @@ GameObject:
   - component: {fileID: 1539806886013619017}
   - component: {fileID: 5933510809653711024}
   - component: {fileID: 6447242417476587872}
+  - component: {fileID: 3131804397016174786}
   m_Layer: 0
   m_Name: CharacterThirdPerson
   m_TagString: Untagged
@@ -1804,6 +1805,21 @@ MonoBehaviour:
   cameraViewSettings: {fileID: 11400000, guid: 7c1d9273b2a944044addf6c00e5c75fd, type: 2}
   cinemachineCamera: {fileID: 8061844062516528105}
   thirdPersonSettings: {fileID: 11400000, guid: 5afa28f8b373e214db706bbb1d03f283, type: 2}
+--- !u!114 &3131804397016174786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8923762327679711103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f01f8d1357ee94894e1bedafddc61c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Freeze.Scripts.CharacterFreeze
+  characterFreezeSettings: {fileID: 11400000, guid: 0238241023f23c54e81ea684be1c909e, type: 2}
+  _freezeFactor: 0
+  _isHardFrozen: 0
 --- !u!1 &8924940935061798737
 GameObject:
   m_ObjectHideFlags: 0

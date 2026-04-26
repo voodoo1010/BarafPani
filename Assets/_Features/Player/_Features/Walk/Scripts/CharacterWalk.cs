@@ -18,6 +18,7 @@ namespace _Features.Player._Features.Walk.Scripts
 
         public float SpeedMultiplier { get; set; } = 1f;
         public float CrouchSpeedMultiplier { get; set; } = 1f;
+        public float FreezeSpeedMultiplier { get; set; } = 1f;
 
         private Vector2 _moveInput;
         public Vector2 MoveInput => _moveInput;
@@ -32,6 +33,7 @@ namespace _Features.Player._Features.Walk.Scripts
             _moveInput = Vector2.zero;
             SpeedMultiplier = 1f;
             CrouchSpeedMultiplier = 1f;
+            FreezeSpeedMultiplier = 1f;
             Character.OnMoveInput -= HandleMove;
         }
 
@@ -42,7 +44,7 @@ namespace _Features.Player._Features.Walk.Scripts
             Vector3 direction = GetMoveDirection();
 
             Character.CharacterControllerUnityComponent.Move(
-                direction * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * Time.deltaTime)
+                direction * (characterWalkSettings.Speed * SpeedMultiplier * CrouchSpeedMultiplier * FreezeSpeedMultiplier * Time.deltaTime)
             );
 
             if (rotateToMovementDirection)

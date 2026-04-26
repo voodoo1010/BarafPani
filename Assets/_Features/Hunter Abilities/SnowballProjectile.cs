@@ -1,3 +1,4 @@
+using _Features.Player._Features.Freeze.Scripts;
 using UnityEngine;
 
 public class SnowballProjectile : MonoBehaviour
@@ -9,6 +10,9 @@ public class SnowballProjectile : MonoBehaviour
 
     [Tooltip("Seconds until the projectile self-destructs if it doesn't hit anything"), Range(1f, 30f)]
     [SerializeField] private float _lifeTime = 8f;
+
+    [Tooltip("Freeze factor added to the runner per hit"), Range(0f, 100f)]
+    [SerializeField] private float _freezeAmount = 25f;
 
     private float _lifeTimer;
 
@@ -51,8 +55,8 @@ public class SnowballProjectile : MonoBehaviour
 
     private void OnHitRunner(Collider runnerCollider)
     {
-        // TODO: do something to the runner here later
-        Debug.Log("Snowball hit runner");
+        IFreezable freezable = runnerCollider.GetComponentInParent<IFreezable>();
+        freezable?.ApplyFreeze(_freezeAmount);
     }
 
     private void SnowballDropOff()

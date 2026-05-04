@@ -125,12 +125,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce1e9939ccb6b54d92f4789ba05eaff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Hunter.BearTrapAbility
-  TrapPrefab: {fileID: 2707590697462422952, guid: aa763e67fea60dd48aadc377589b00b8, type: 3}
-  TrapGhostPrefab: {fileID: 2707590697462422952, guid: d923a360420a7fe48947c21b128e47ee, type: 3}
-  MaxPlaceDistance: 8
+  TrapPrefab: {fileID: 6292712363285161949, guid: 327c9a68bdc4b9b4aa3a5081b3d32ab1, type: 3}
+  TrapGhostPrefab: {fileID: 8611602181648373349, guid: b2d7bd29460a870459958fcd3c4e32d0, type: 3}
+  MinDistance: 1.5
+  MaxDistance: 8
   GroundOffset: 0.05
+  RotationStep: 15
   MaxTrapsActive: 3
   GroundLayer:
     serializedVersion: 2
     m_Bits: 0
+  ValidColor: {r: 0.7, g: 0.45, b: 0.1, a: 0.55}
+  InvalidColor: {r: 1, g: 0.15, b: 0.15, a: 0.55}
   CooldownRadialUI: {fileID: 0}

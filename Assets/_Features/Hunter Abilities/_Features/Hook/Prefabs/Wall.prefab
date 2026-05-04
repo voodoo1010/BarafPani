@@ -125,14 +125,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f316e89e7e1729346b2c52899d87a214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Hunter.IceWall
-  wallSegmentPrefab: {fileID: 492346885227042013, guid: f1f7dea920d61b04085b283437657154, type: 3}
-  wallGhostSegmentPrefab: {fileID: 5324227243551224598, guid: 90674085fd3369148bdcfdd2e926318e, type: 3}
+  wallSegmentPrefab: {fileID: 1361645278023560941, guid: f1f7dea920d61b04085b283437657154, type: 3}
+  wallGhostSegmentPrefab: {fileID: 1361645278023560941, guid: f449d31e43d19ef4b9613261084d5555, type: 3}
   segmentCount: 4
+  segmentWidth: 1
   segmentGap: 0.05
-  maxPlaceDistance: 10
-  wallHeightOffset: 1
+  minDistance: 2
+  maxDistance: 12
+  heightOffset: 1
   rotationStep: 15
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
+  validColor: {r: 0.2, g: 0.85, b: 1, a: 0.45}
+  invalidColor: {r: 1, g: 0.2, b: 0.2, a: 0.45}
   cooldownRadialUI: {fileID: 0}

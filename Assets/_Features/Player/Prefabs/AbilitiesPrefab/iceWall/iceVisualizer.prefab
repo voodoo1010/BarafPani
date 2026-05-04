@@ -732,7 +732,7 @@ GameObject:
   - component: {fileID: 7303556415022789213}
   - component: {fileID: 3718962450729298598}
   m_Layer: 0
-  m_Name: IceWall
+  m_Name: iceVisualizer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

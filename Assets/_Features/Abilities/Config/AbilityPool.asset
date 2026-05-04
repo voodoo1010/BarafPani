@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: AbilityPool
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Abilities.Core.Scripts.AbilityPool
   hunterPool:
-  - {fileID: 11400000, guid: 0d2ca22fd9028a346a71b5373ed0c87a, type: 2}
-  - {fileID: 11400000, guid: d0ed34ba8d99b2f4bb0b74a58fdac566, type: 2}
   - {fileID: 11400000, guid: 565b1dbff5b6b5442a8ece85b988f94a, type: 2}
   - {fileID: 11400000, guid: ef8f07d93c124fd428371394dbd9551b, type: 2}
+  - {fileID: 11400000, guid: d0ed34ba8d99b2f4bb0b74a58fdac566, type: 2}
+  - {fileID: 11400000, guid: 0d2ca22fd9028a346a71b5373ed0c87a, type: 2}
   runnerPool: []
   uniqueRoll: 1
+  debugMode: 1
+  debugHunterLoadout:
+  - {fileID: 11400000, guid: d0ed34ba8d99b2f4bb0b74a58fdac566, type: 2}
+  - {fileID: 11400000, guid: 565b1dbff5b6b5442a8ece85b988f94a, type: 2}

@@ -132,11 +132,17 @@ MonoBehaviour:
   segmentGap: 0.05
   minDistance: 2
   maxDistance: 12
-  heightOffset: 1
+  heightOffset: 0
+  snapRayOriginHeight: 10
+  snapRayDistance: 20
   rotationStep: 15
   groundLayer:
     serializedVersion: 2
+    m_Bits: 64
+  obstacleLayer:
+    serializedVersion: 2
     m_Bits: 0
+  segmentOverlapHalfExtents: {x: 0.4, y: 0.8, z: 0.4}
   validColor: {r: 0.2, g: 0.85, b: 1, a: 0.45}
   invalidColor: {r: 1, g: 0.2, b: 0.2, a: 0.45}
   cooldownRadialUI: {fileID: 0}

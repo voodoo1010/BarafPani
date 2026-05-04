@@ -129,12 +129,18 @@ MonoBehaviour:
   TrapGhostPrefab: {fileID: 8611602181648373349, guid: b2d7bd29460a870459958fcd3c4e32d0, type: 3}
   MinDistance: 1.5
   MaxDistance: 8
-  GroundOffset: 0.05
+  GroundOffset: 0
+  SnapRayOriginHeight: 1
+  SnapRayDistance: 20
   RotationStep: 15
   MaxTrapsActive: 3
   GroundLayer:
     serializedVersion: 2
+    m_Bits: 64
+  ObstacleLayer:
+    serializedVersion: 2
     m_Bits: 0
+  OverlapHalfExtents: {x: 0.3, y: 0.1, z: 0.3}
   ValidColor: {r: 0.7, g: 0.45, b: 0.1, a: 0.55}
   InvalidColor: {r: 1, g: 0.15, b: 0.15, a: 0.55}
   CooldownRadialUI: {fileID: 0}

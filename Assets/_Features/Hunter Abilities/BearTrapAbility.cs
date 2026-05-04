@@ -8,6 +8,10 @@ namespace _Features.Abilities.Hunter
 {
     public class BearTrapAbility : AbilityBase
     {
+        // ─────────────────────────────────────────────────────────────
+        // Inspector
+        // ─────────────────────────────────────────────────────────────
+
         [Header("Prefabs")]
         [Tooltip("The actual bear trap prefab. Must have BearTrapObject.cs + a Trigger Collider."), ForceFill]
         public GameObject TrapPrefab;
@@ -16,26 +20,39 @@ namespace _Features.Abilities.Hunter
         public GameObject TrapGhostPrefab;
 
         [Header("Aim & Distance")]
-        [Range(1f, 5f), Tooltip("Minimum placement distance (when looking down)")]
+        [Range(1f, 5f), Tooltip("Minimum placement distance from origin")]
         public float MinDistance = 1.5f;
 
-        [Range(3f, 30f), Tooltip("Maximum placement distance (when looking forward)")]
+        [Range(3f, 30f), Tooltip("Maximum placement distance from origin")]
         public float MaxDistance = 8f;
 
-        [Range(0f, 1f), Tooltip("Vertical offset above ground")]
+        [Range(0f, 1f), Tooltip("Vertical offset above the snapped ground point")]
         public float GroundOffset = 0.05f;
+
+        [Header("Ground Snap")]
+        [Tooltip("How far above the clamped XZ point the snap ray starts")]
+        public float SnapRayOriginHeight = 10f;
+
+        [Tooltip("Maximum downward distance the snap ray travels")]
+        public float SnapRayDistance = 20f;
 
         [Header("Rotation (Optional)")]
         [Range(5f, 90f), Tooltip("Degrees per scroll tick")]
         public float RotationStep = 15f;
 
         [Header("Trap Limit")]
-        [Range(0, 10), Tooltip("Maximum active traps. 0 = unlimited.")]
+        [Range(0, 10), Tooltip("Maximum active traps at once. 0 = unlimited.")]
         public int MaxTrapsActive = 3;
 
-        [Header("Layer Mask")]
+        [Header("Layer Masks")]
         [Tooltip("Layers considered valid ground")]
         public LayerMask GroundLayer = ~0;
+
+        [Tooltip("Layers that block placement. Set to Nothing to skip check.")]
+        public LayerMask ObstacleLayer;
+
+        [Tooltip("Half-extents of the overlap box used to detect obstructions at the trap position")]
+        public Vector3 OverlapHalfExtents = new(0.3f, 0.1f, 0.3f);
 
         [Header("Validation Colors")]
         public Color ValidColor = new(0.7f, 0.45f, 0.1f, 0.55f);
@@ -44,19 +61,31 @@ namespace _Features.Abilities.Hunter
         [Header("UI (Optional)")]
         public UnityEngine.UI.Image CooldownRadialUI;
 
+        // ─────────────────────────────────────────────────────────────
+        // Private state
+        // ─────────────────────────────────────────────────────────────
+
         private bool _isPlacing;
         private float _yawOffset;
         private GameObject _ghostInstance;
-        private Camera _camera;
+        private Renderer[] _ghostRenderers;
+        private bool _lastPlacementValid;
         private int _activeTraps;
 
+        private Camera _cam;
         private InputAction _scrollAction;
+
+        private MaterialPropertyBlock _mpb;
+        private static readonly int ColorPropID = Shader.PropertyToID("_Color");
+
+        // ─────────────────────────────────────────────────────────────
+        // AbilityBase lifecycle
+        // ─────────────────────────────────────────────────────────────
 
         protected override void OnAcquiredInternal()
         {
-            _camera = Camera.main;
-            if (_camera == null)
-                Debug.LogError("[BearTrap] No Main Camera found! Tag your camera as MainCamera.");
+            _cam = Manager.AbilityCamera != null ? Manager.AbilityCamera : Camera.main;
+            _mpb = new MaterialPropertyBlock();
 
             _scrollAction = new InputAction("TrapScroll", binding: "<Mouse>/scroll/y");
             _scrollAction.Enable();
@@ -67,24 +96,14 @@ namespace _Features.Abilities.Hunter
 
         protected override void OnReleasedInternal()
         {
-            if (_isPlacing) CancelPlacement();
+            DestroyGhost();
             _scrollAction?.Dispose();
             _scrollAction = null;
         }
 
-        protected override void Update()
-        {
-            base.Update();
-
-            if (CooldownRadialUI != null)
-                CooldownRadialUI.fillAmount = CooldownNormalized;
-
-            if (_isPlacing)
-            {
-                HandleScrollRotation();
-                UpdateGhost();
-            }
-        }
+        // ─────────────────────────────────────────────────────────────
+        // Phase 1 — Activate
+        // ─────────────────────────────────────────────────────────────
 
         protected override bool OnActivateInternal()
         {
@@ -94,48 +113,124 @@ namespace _Features.Abilities.Hunter
                 return false;
             }
 
-            if (!_isPlacing)
-                EnterPlacementMode();
-            else
-                ConfirmPlacement();
-
+            SpawnGhost();
             return true;
         }
 
-        // ───────────────────────────────────────────────────────────
-        // Preview Lifecycle
-        // ───────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────
+        // Phase 2 — Ability Attack
+        // ─────────────────────────────────────────────────────────────
 
-        private void EnterPlacementMode()
+        public override bool OnAbilityAttackInternal()
+        {
+            if (!_isPlacing) return false;
+            if (!TryGetPlacement(out Vector3 point, out Quaternion rotation, out bool isValid)) return false;
+
+            if (!isValid)
+            {
+                Debug.Log("[BearTrap] Placement blocked — obstruction or out of range.");
+                return false;
+            }
+
+            PlaceTrap(point, rotation);
+            DestroyGhost();
+            ConsumeActivation();
+            return true;
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // Cancel
+        // ─────────────────────────────────────────────────────────────
+
+        public override void OnCancelInternal()
+        {
+            DestroyGhost();
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // Update
+        // ─────────────────────────────────────────────────────────────
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (CooldownRadialUI != null)
+                CooldownRadialUI.fillAmount = CooldownNormalized;
+
+            if (!_isPlacing) return;
+
+            ReadScrollInput();
+            UpdateGhost();
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // Ghost management
+        // ─────────────────────────────────────────────────────────────
+
+        private void SpawnGhost()
         {
             if (TrapGhostPrefab == null) return;
 
             _isPlacing = true;
             _yawOffset = 0f;
-
             _ghostInstance = Instantiate(TrapGhostPrefab);
             _ghostInstance.name = "BearTrapGhost";
-            DisableAllColliders(_ghostInstance);
+
+            foreach (var col in _ghostInstance.GetComponentsInChildren<Collider>())
+                col.enabled = false;
+
+            _ghostRenderers = _ghostInstance.GetComponentsInChildren<Renderer>();
 
             UpdateGhost();
         }
 
-        private void CancelPlacement()
+        private void DestroyGhost()
         {
             _isPlacing = false;
-            DestroyGhost();
+
+            if (_ghostInstance != null)
+            {
+                Destroy(_ghostInstance);
+                _ghostInstance = null;
+                _ghostRenderers = null;
+            }
         }
 
-        private void ConfirmPlacement()
+        private void UpdateGhost()
+        {
+            if (_ghostInstance == null) return;
+
+            bool resolved = TryGetPlacement(out Vector3 point, out Quaternion rotation, out bool isValid);
+            _lastPlacementValid = resolved && isValid;
+
+            if (resolved)
+            {
+                _ghostInstance.SetActive(true);
+                _ghostInstance.transform.SetPositionAndRotation(point, rotation);
+            }
+            else
+            {
+                _ghostInstance.SetActive(false);
+            }
+
+            if (_ghostRenderers == null) return;
+            Color tint = _lastPlacementValid ? ValidColor : InvalidColor;
+            foreach (var r in _ghostRenderers)
+            {
+                r.GetPropertyBlock(_mpb);
+                _mpb.SetColor(ColorPropID, tint);
+                r.SetPropertyBlock(_mpb);
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // Placement
+        // ─────────────────────────────────────────────────────────────
+
+        private void PlaceTrap(Vector3 point, Quaternion rotation)
         {
             if (TrapPrefab == null) return;
-            if (!TryGetPlacement(out Vector3 point, out Quaternion rotation, out bool isValid)) return;
-
-            if (!isValid)
-            {
-                Debug.Log("[BearTrap] Invalid placement.");
-                return;
-            }
 
             GameObject trap = Instantiate(TrapPrefab, point, rotation);
             trap.name = "BearTrap";
@@ -143,29 +238,17 @@ namespace _Features.Abilities.Hunter
 
             if (trap.GetComponent<BearTrapObject>() != null)
                 StartCoroutine(TrackTrapLifetime(trap));
-
-            CancelPlacement();
-            ConsumeActivation();
         }
 
-        // ───────────────────────────────────────────────────────────
-        // Input
-        // ───────────────────────────────────────────────────────────
-
-        private void HandleScrollRotation()
+        private IEnumerator TrackTrapLifetime(GameObject trap)
         {
-            if (_scrollAction == null) return;
-
-            float scroll = _scrollAction.ReadValue<float>();
-            if (Mathf.Abs(scroll) <= 0.01f) return;
-
-            _yawOffset += scroll > 0 ? RotationStep : -RotationStep;
-            _yawOffset = Mathf.Repeat(_yawOffset, 360f);
+            yield return new WaitUntil(() => trap == null);
+            _activeTraps = Mathf.Max(0, _activeTraps - 1);
         }
 
-        // ───────────────────────────────────────────────────────────
-        // Aim Calculation (Sage-style: screen center ray)
-        // ───────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────
+        // Aim & Placement Calculation
+        // ─────────────────────────────────────────────────────────────
 
         private bool TryGetPlacement(out Vector3 worldPoint, out Quaternion rotation, out bool isValid)
         {
@@ -173,15 +256,15 @@ namespace _Features.Abilities.Hunter
             rotation = Quaternion.identity;
             isValid = false;
 
-            if (_camera == null) return false;
+            if (_cam == null) return false;
 
-            // Ray from camera through screen center
-            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Transform origin = Manager.AbilityOrigin != null ? Manager.AbilityOrigin : transform;
 
+            // ── Step 1: aim point from screen-centre ray ─────────────
+            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             Vector3 aimPoint;
             Vector3 surfaceNormal = Vector3.up;
 
-            // Try to hit ground
             if (Physics.Raycast(ray, out RaycastHit hit, MaxDistance * 2f, GroundLayer))
             {
                 aimPoint = hit.point;
@@ -189,102 +272,65 @@ namespace _Features.Abilities.Hunter
             }
             else
             {
-                // Fallback: project ray onto horizontal plane at player feet
-                Plane groundPlane = new Plane(Vector3.up, transform.position);
-                if (groundPlane.Raycast(ray, out float dist))
-                    aimPoint = ray.GetPoint(dist);
-                else
-                    return false;
+                Plane groundPlane = new Plane(Vector3.up, origin.position);
+                if (!groundPlane.Raycast(ray, out float t)) return false;
+                aimPoint = ray.GetPoint(t);
             }
 
-            // Clamp distance from player
-            Vector3 toAim = aimPoint - transform.position;
+            // ── Step 2: clamp horizontal distance ───────────────────
+            Vector3 toAim = aimPoint - origin.position;
             toAim.y = 0f;
-            float distance = toAim.magnitude;
-            distance = Mathf.Clamp(distance, MinDistance, MaxDistance);
 
-            Vector3 horizontalDir = toAim.sqrMagnitude > 0.001f ? toAim.normalized : transform.forward;
+            if (toAim.sqrMagnitude < 0.001f) toAim = origin.forward;
+            Vector3 flatDir = toAim.normalized;
+            float distance = Mathf.Clamp(toAim.magnitude, MinDistance, MaxDistance);
 
-            // Final placement point — at original aim height if hit was valid, else flat
-            Vector3 basePos = transform.position + horizontalDir * distance;
-            basePos.y = aimPoint.y;
-            worldPoint = basePos + Vector3.up * GroundOffset;
+            worldPoint = origin.position + flatDir * distance;
 
-            // Rotation: align trap "up" with surface normal, face away from player, plus scroll offset
-            Vector3 trapForward = horizontalDir;
-            rotation = Quaternion.LookRotation(trapForward, surfaceNormal) * Quaternion.Euler(0f, _yawOffset, 0f);
+            // ── Step 3: ground-snap ──────────────────────────────────
+            // Fire a fresh downward ray at the clamped XZ to get the true
+            // ground Y there. Also refreshes surfaceNormal for slope alignment.
+            // Fixes the Y/XZ mismatch that caused floating.
+            Vector3 sampleOrigin = new Vector3(worldPoint.x, origin.position.y + SnapRayOriginHeight, worldPoint.z);
+            if (Physics.Raycast(sampleOrigin, Vector3.down, out RaycastHit snapHit, SnapRayDistance, GroundLayer))
+            {
+                worldPoint.y = snapHit.point.y + GroundOffset;
+                surfaceNormal = snapHit.normal; // use accurate normal for slope alignment below
+            }
+            else
+            {
+                worldPoint.y = aimPoint.y + GroundOffset; // fallback if snap ray misses (e.g. over a void)
+            }
 
-            // Valid if the actual aim distance was within range (didn't have to clamp too hard)
-            isValid = (aimPoint - transform.position).magnitude <= MaxDistance * 1.05f;
+            // ── Step 4: rotation — trap faces player + scroll yaw ───
+            float baseYaw = Mathf.Atan2(-flatDir.x, -flatDir.z) * Mathf.Rad2Deg;
+            rotation = Quaternion.Euler(0f, baseYaw + _yawOffset, 0f);
+
+            // ── Step 5: align to surface normal (sloped ground) ─────
+            if (surfaceNormal != Vector3.up)
+            {
+                Quaternion surfaceAlign = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
+                rotation = surfaceAlign * rotation;
+            }
+
+            // ── Step 6: obstruction check ────────────────────────────
+            isValid = ObstacleLayer == 0
+                || !Physics.CheckBox(worldPoint, OverlapHalfExtents, rotation, ObstacleLayer);
 
             return true;
         }
 
-        // ───────────────────────────────────────────────────────────
-        // Ghost Update
-        // ───────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────
+        // Input
+        // ─────────────────────────────────────────────────────────────
 
-        private void UpdateGhost()
+        private void ReadScrollInput()
         {
-            if (_ghostInstance == null) return;
-
-            if (!TryGetPlacement(out Vector3 point, out Quaternion rotation, out bool isValid))
-            {
-                _ghostInstance.SetActive(false);
-                return;
-            }
-
-            _ghostInstance.SetActive(true);
-            _ghostInstance.transform.position = point;
-            _ghostInstance.transform.rotation = rotation;
-
-            SetGhostColour(isValid ? ValidColor : InvalidColor);
-        }
-
-        private IEnumerator TrackTrapLifetime(GameObject trap)
-        {
-            while (trap != null) yield return null;
-            _activeTraps = Mathf.Max(0, _activeTraps - 1);
-        }
-
-        private void DestroyGhost()
-        {
-            if (_ghostInstance == null) return;
-            Destroy(_ghostInstance);
-            _ghostInstance = null;
-        }
-
-        private void SetGhostColour(Color colour)
-        {
-            if (_ghostInstance == null) return;
-
-            foreach (Renderer r in _ghostInstance.GetComponentsInChildren<Renderer>())
-            {
-                foreach (Material mat in r.materials)
-                {
-                    if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", colour);
-                    else if (mat.HasProperty("_Color")) mat.color = colour;
-                }
-            }
-        }
-
-        private void DisableAllColliders(GameObject go)
-        {
-            foreach (Collider col in go.GetComponentsInChildren<Collider>())
-                col.enabled = false;
-        }
-
-        private void OnDisable()
-        {
-            DestroyGhost();
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
-            Gizmos.DrawWireSphere(transform.position, MaxDistance);
-            Gizmos.color = new Color(0f, 0.8f, 1f, 0.3f);
-            Gizmos.DrawWireSphere(transform.position, MinDistance);
+            if (_scrollAction == null) return;
+            float scroll = _scrollAction.ReadValue<float>();
+            if (Mathf.Abs(scroll) <= 0.01f) return;
+            _yawOffset += scroll > 0f ? RotationStep : -RotationStep;
+            _yawOffset = Mathf.Repeat(_yawOffset, 360f);
         }
     }
 }

@@ -19,6 +19,7 @@ public class MultiplayerLobbyManager : MonoBehaviour
     private float heartBeatTimer;
     [SerializeField] private float lobbyPollTimerLimit = 1.1f;
     private float lobbyPollTimer;
+    private bool isPolling = false;
 
     // EVENTS
     public static Action OnLobbyCreated;
@@ -34,10 +35,15 @@ public class MultiplayerLobbyManager : MonoBehaviour
         await InitializeAsync();
     }
 
-    void Update()
+    private async void Update()
     {
         HandleHeartbeat();
-        HandleLobbyPolling();
+        if (!isPolling)
+        {
+            isPolling = true;
+            await HandleLobbyPolling();
+            isPolling = false;
+        }
     }
     #endregion
 

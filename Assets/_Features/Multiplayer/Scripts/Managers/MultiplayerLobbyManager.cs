@@ -25,6 +25,7 @@ public class MultiplayerLobbyManager : MonoBehaviour
     public static Action OnLobbyCreated;
     public static Action OnLobbyJoined;
     public static Action<Lobby> OnLobbyStateChanged;
+    public static Action OnLobbyLeft;
 
     public static MultiplayerLobbyManager Instance;
 
@@ -87,6 +88,24 @@ public class MultiplayerLobbyManager : MonoBehaviour
                 Lobby newLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
                 currentLobby = newLobby;
 
+                bool stillInLobby = false;
+
+                foreach (var player in currentLobby.Players)
+                {
+                    if (player.Id == AuthenticationService.Instance.PlayerId)
+                    {
+                        stillInLobby = true;
+                        break;
+                    }
+                }
+
+                if (!stillInLobby)
+                {
+                    DebugLog("You were removed from the lobby.");
+                    LeaveLobbyLocally();
+                    return;
+                }
+
                 OnLobbyStateChanged?.Invoke(currentLobby);
             }
             catch (LobbyServiceException e)
@@ -104,6 +123,19 @@ public class MultiplayerLobbyManager : MonoBehaviour
             }
         }
     }
+
+    private void LeaveLobbyLocally()
+    {
+        currentLobby = null;
+
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        OnLobbyLeft?.Invoke();
+    }
+
     #endregion
 
     #region API
@@ -146,6 +178,24 @@ public class MultiplayerLobbyManager : MonoBehaviour
         currentLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode, options);
         string relayCode = currentLobby.Data["RelayCode"].Value;
         await JoinRelayAndStartClient(relayCode);
+    }
+
+    public async Task LeaveLobby()
+    {
+        if (currentLobby == null) return;
+
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, AuthenticationService.Instance.PlayerId);
+        }
+        catch (LobbyServiceException e)
+        {
+            DebugLog("Error leaving lobby: " + e.Message);
+        }
+        finally
+        {
+            LeaveLobbyLocally();
+        }
     }
 
     public async Task KickPlayer(string playerId)

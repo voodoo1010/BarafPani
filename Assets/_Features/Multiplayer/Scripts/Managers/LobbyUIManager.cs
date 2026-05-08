@@ -23,14 +23,19 @@ public class LobbyUIManager : MonoBehaviour
 
     private Dictionary<string, GameObject> playerEntries = new();
     MultiplayerLobbyManager lobbyManager => MultiplayerLobbyManager.Instance;
-    public void HostButtonCallback()
+    public async void HostButtonCallback()
     {
-        lobbyManager.CreateLobby();
+        await lobbyManager.CreateLobby();
     }
-    public void JoinButtonCallback()
+    public async void JoinButtonCallback()
     {
         if (string.IsNullOrEmpty(joinCodeInput.text)) return;
-        lobbyManager.JoinLobbyByCode(joinCodeInput.text);
+        await lobbyManager.JoinLobbyByCode(joinCodeInput.text);
+    }
+
+    public async void LeaveButtonCallback()
+    {
+        await lobbyManager.LeaveLobby();
     }
 
     public void CopyLobbyCode()
@@ -45,6 +50,7 @@ public class LobbyUIManager : MonoBehaviour
         MultiplayerLobbyManager.OnLobbyCreated += PrepareLobby;
         MultiplayerLobbyManager.OnLobbyJoined += PrepareLobby;
         MultiplayerLobbyManager.OnLobbyStateChanged += RefreshLobbyUI;
+        MultiplayerLobbyManager.OnLobbyLeft += ReturnToCTA;
     }
 
     void OnDisable()
@@ -52,6 +58,7 @@ public class LobbyUIManager : MonoBehaviour
         MultiplayerLobbyManager.OnLobbyCreated -= PrepareLobby;
         MultiplayerLobbyManager.OnLobbyJoined -= PrepareLobby;
         MultiplayerLobbyManager.OnLobbyStateChanged -= RefreshLobbyUI;
+        MultiplayerLobbyManager.OnLobbyLeft -= ReturnToCTA;
     }
 
 
@@ -85,6 +92,18 @@ public class LobbyUIManager : MonoBehaviour
 
             SpawnPlayerEntry(playerName, player.Id, isHost, isLocalHost && !isHost);
         }
+    }
+
+    private void ReturnToCTA()
+    {
+        CTA.SetActive(true);
+        joinScreen.SetActive(false);
+        lobbyScreen.SetActive(false);
+
+        foreach (var entry in playerEntries)
+            Destroy(entry.Value);
+
+        playerEntries.Clear();
     }
 
     #endregion

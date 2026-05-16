@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bridge
-  m_Shader: {fileID: -6465566751694194690, guid: fdbb9d4bebe30224a9762505ebe3e2ee, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e4c4ffb9e9c92684097cacd2fbce1f6a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -43,6 +43,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: daf1659cd1cfbf94aae38cbdf18f517a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Color:
+        m_Texture: {fileID: 2800000, guid: a4ddc23928630634fb96c7e3f901eefe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -79,6 +83,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Roughness:
+        m_Texture: {fileID: 2800000, guid: 2493b30153add7e408e868436aea96dd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowTexture:
+        m_Texture: {fileID: 2800000, guid: ffa01093856b873448237de84289ee85, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -123,14 +135,17 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _Noise_Scale: 10
+    - _NormalAmount: 1
     - _Normal_Strength: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _RoughnessAmount: 1
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
+    - _SnowBalance: 1.46
     - _Snow_Opacity: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -142,6 +157,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorTint: {r: 1, g: 1, b: 1, a: 1}
     - _Dust_Color: {r: 0.8627451, g: 0.96862745, b: 1, a: 0}
     - _Dust_Direction: {r: 0, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

@@ -193,7 +193,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5812986834745007305}
@@ -3398,6 +3398,7 @@ MonoBehaviour:
   attackAction: {fileID: -2655994690423071068, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   ability1Action: {fileID: -1177821007492800487, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
   ability2Action: {fileID: 6852644961083374836, guid: 5ca90ce3c866b804ab9b1fbee8dfa20d, type: 3}
+  abilityAttackAction: {fileID: 0}
 --- !u!1 &9168486005419861272
 GameObject:
   m_ObjectHideFlags: 0
@@ -3443,11 +3444,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12
+      value: 17.142857
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2689496549677107459, guid: e12ab6468a147c44f935f6499a424551, type: 3}
       propertyPath: m_LocalRotation.w

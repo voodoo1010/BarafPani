@@ -64,6 +64,16 @@ namespace _Features.Player._Features.Input
             actionRef.action.canceled -= callback;
         }
 
+        public void DisableAllInputs()
+        {
+            DisableAction(moveAction, OnMove);
+            DisableAction(lookAction, OnLook);
+            DisableAction(sprintAction, OnSprint);
+            DisableAction(crouchAction, OnCrouch);
+            DisableAction(grabAction, OnGrab);
+            DisableAction(jumpAction, OnJump);
+        }
+
         private void OnMove(InputAction.CallbackContext ctx)
         {
             _character.RaiseMoveInput(ctx.ReadValue<Vector2>());

@@ -89,6 +89,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SnowNormal:
+        m_Texture: {fileID: 2800000, guid: 79c2592201173a346ba854ea6b9cced6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SnowTexture:
         m_Texture: {fileID: 2800000, guid: ffa01093856b873448237de84289ee85, type: 3}
         m_Scale: {x: 1, y: 1}

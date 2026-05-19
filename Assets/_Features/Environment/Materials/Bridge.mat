@@ -89,6 +89,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 2493b30153add7e408e868436aea96dd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SnowNormal:
+        m_Texture: {fileID: 2800000, guid: 79c2592201173a346ba854ea6b9cced6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SnowTexture:
         m_Texture: {fileID: 2800000, guid: ffa01093856b873448237de84289ee85, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -142,7 +146,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RoughnessAmount: 1
+    - _RoughnessAmount: 0
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SnowBalance: 1.46

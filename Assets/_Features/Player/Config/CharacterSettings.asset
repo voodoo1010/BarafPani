@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb443c003174dd94e9c3ed70ac7fb10b, type: 3}
   m_Name: CharacterSettings
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player.Config.Scripts.CharacterSettings
-  GroundCheckPoint: {x: 0, y: -1, z: 0}
   GroundCheckRadius: 0.2
   GroundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 65

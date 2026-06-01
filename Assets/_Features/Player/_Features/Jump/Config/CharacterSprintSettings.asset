@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dcff3aad5689d147bdcd7d3e59e8742, type: 3}
   m_Name: CharacterSprintSettings
   m_EditorClassIdentifier: Assembly-CSharp::_Features.Player._Features.Jump.Config.Scripts.CharacterJumpSettings
-  JumpHeight: 1.2
+  JumpHeight: 1.5
   Gravity: -20
